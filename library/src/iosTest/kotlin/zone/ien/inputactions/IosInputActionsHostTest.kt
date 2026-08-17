@@ -9,6 +9,7 @@ import platform.UIKit.UIBarButtonItemStyle
 import platform.UIKit.UIToolbar
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertSame
@@ -74,21 +75,20 @@ class IosInputActionsHostTest {
     }
 
     @Test
-    fun pillStyleUsesTheSystemToolbar() {
+    fun toolbarUsesTheSystemToolbar() {
         val host = IosInputActionsHost()
         val target = InputActionTarget()
 
         host.registerActions(
             target,
             listOf(InputAction(title = "Done", onClick = {})),
-            style = InputActionsStyle.Pill,
         )
 
         assertNotNull(host.createToolbar())
     }
 
     @Test
-    fun pillStyleKeepsDoneActionInTheSharedBackgroundGroup() {
+    fun flexibleSpaceKeepsActionsInTheSharedBackgroundGroup() {
         val host = IosInputActionsHost()
         val target = InputActionTarget()
 
@@ -96,25 +96,51 @@ class IosInputActionsHostTest {
             target,
             listOf(
                 InputAction(title = "Previous", onClick = {}),
+                InputAction.FlexibleSpace,
                 InputAction(
                     title = "Done",
-                    style = InputActionStyle.Done,
                     onClick = {},
                 ),
             ),
-            style = InputActionsStyle.Pill,
         )
 
         val items = assertNotNull(host.createToolbar()).items
             .orEmpty()
             .map { it as UIBarButtonItem }
 
-        assertEquals(UIBarButtonItemStyle.UIBarButtonItemStylePlain, items.last().style)
+        assertEquals(3, items.size)
         val majorVersion = NSProcessInfo.processInfo.operatingSystemVersion.useContents {
             majorVersion.toInt()
         }
         if (majorVersion >= 26) {
             assertTrue(items.all { it.sharesBackground })
+            assertFalse(items[1].hidesSharedBackground)
+        }
+    }
+
+    @Test
+    fun flexibleSpaceCanHideTheSharedBackground() {
+        val host = IosInputActionsHost()
+        val target = InputActionTarget()
+
+        host.registerActions(
+            target,
+            listOf(
+                InputAction(title = "Previous", onClick = {}),
+                InputAction.flexibleSpace(hidesSharedBackground = true),
+                InputAction(title = "Done", onClick = {}),
+            ),
+        )
+
+        val items = assertNotNull(host.createToolbar()).items
+            .orEmpty()
+            .map { it as UIBarButtonItem }
+        val majorVersion = NSProcessInfo.processInfo.operatingSystemVersion.useContents {
+            majorVersion.toInt()
+        }
+        if (majorVersion >= 26) {
+            assertFalse(items[1].sharesBackground)
+            assertTrue(items[1].hidesSharedBackground)
         }
     }
 

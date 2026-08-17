@@ -1,6 +1,5 @@
 package zone.ien.inputactions
 
-import androidx.compose.ui.Modifier
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -29,22 +28,25 @@ class InputActionTest {
     }
 
     @Test
-    fun inputActionsCanRequestPillPresentation() {
-        Modifier.inputActions(
-            InputAction(title = "Done", onClick = {}),
-            style = InputActionsStyle.Pill,
-        )
-
-        assertEquals(InputActionsStyle.Pill, InputActionsStyle.Pill)
-    }
-
-    @Test
     fun inputActionCanUseAnIconWithoutATitle() {
         val icon = InputActionIcon(systemName = "chevron.up")
         val action = InputAction(icon = icon, onClick = {})
 
         assertEquals("", action.title)
         assertEquals(icon, action.icon)
+    }
+
+    @Test
+    fun inputActionCanControlSharedBackgroundVisibility() {
+        val action = InputAction(
+            title = "Next",
+            hidesSharedBackground = true,
+            onClick = {},
+        )
+        val flexibleSpace = InputAction.flexibleSpace(hidesSharedBackground = true)
+
+        assertTrue(action.hidesSharedBackground)
+        assertTrue(flexibleSpace.hidesSharedBackground)
     }
 
     @Test

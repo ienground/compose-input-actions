@@ -33,7 +33,6 @@ import zone.ien.inputactions.InputAction
 import zone.ien.inputactions.InputActionIcon
 import zone.ien.inputactions.InputActionStyle
 import zone.ien.inputactions.InputActionsHost
-import zone.ien.inputactions.InputActionsStyle
 import zone.ien.inputactions.inputActions
 
 @Composable
@@ -79,11 +78,21 @@ private fun InputActionsSample() {
                 lastAction = "이름: Clear"
                 name = ""
             },
-            InputAction.FlexibleSpace,
+            InputAction.FlexibleSpace(hidesSharedBackground = true),
             InputAction(
                 title = "Done",
                 icon = InputActionIcon(systemName = "checkmark"),
-                style = InputActionStyle.Done,
+//                style = InputActionStyle.Done,
+                onClick = {
+                    lastAction = "이름: Done"
+                    focusManager.clearFocus()
+                    keyboardController?.hide()
+                },
+            ),
+            InputAction(
+                title = "Done",
+                icon = InputActionIcon(systemName = "checkmark"),
+//                style = InputActionStyle.Done,
                 onClick = {
                     lastAction = "이름: Done"
                     focusManager.clearFocus()
@@ -158,12 +167,28 @@ private fun InputActionsSample() {
                 value = name,
                 onValueChange = { name = it },
                 modifier = Modifier.inputActions(
-                    InputAction.FlexibleSpace,
                     InputAction(
-                        title = "Hello",
-                        style = InputActionStyle.Plain,
-                        onClick = {},
-                    ),
+                        title = "Next",
+                    ) {
+                        lastAction = "이름: Next"
+                        emailFocusRequester.requestFocus()
+                    },
+                    InputAction(
+                        title = "Clear",
+                    ) {
+                        lastAction = "이름: Clear"
+                        name = ""
+                    },
+                    InputAction.FlexibleSpace(hidesSharedBackground = true),
+                    InputAction(
+                        title = "Done",
+                        style = InputActionStyle.Done,
+                        onClick = {
+                            lastAction = "이름: Done"
+                            focusManager.clearFocus()
+                            keyboardController?.hide()
+                        },
+                    )
 
 //                    InputAction(
 //                        title = "Hello",
@@ -186,7 +211,6 @@ private fun InputActionsSample() {
                     }
                     .inputActions(
                         *nameActions.toTypedArray(),
-                        style = InputActionsStyle.Pill,
                     ),
                 label = { Text("이름") },
                 placeholder = { Text("Next / Clear 액션") },
