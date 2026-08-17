@@ -938,3 +938,44 @@ The central goal is narrow:
 > Allow ordinary Compose Multiplatform text fields to expose native platform text-input actions while preserving Compose ownership of the text field.
 
 Keep the implementation centered on that goal.
+
+
+---
+
+## README.md Structure & Style Guide
+
+When creating or updating the repository's `README.md`, follow the structure and design style established in `firebase-kotlin-sdk`:
+
+1. **Header & Badges**
+   - Centered top logo image `<p align="center"><img src="..." width="150" /></p>`.
+   - Project title `# <Project Name>`.
+   - Language switcher link (e.g. `**English** | [한국어](README_ko.md)`).
+   - Badges for Maven/Sonatype, Kotlin version, and supported platforms (Android | iOS).
+   - Concise 1-2 sentence core value proposition.
+
+2. **Features & Support Matrix**
+   - High-level feature highlights (Kotlin-First design, thin wrappers, etc.).
+   - Detailed feature/supported matrix table with columns: `Feature`, `Android Support`, `iOS Support`, `Completion Rate`, and `Under the Hood`.
+
+3. **Installation**
+   - Gradle KMP dependency blocks (`build.gradle.kts` snippet).
+   - Platform-Specific Setup instructions (Android configuration, iOS SPM / Xcode setup).
+   - Callout boxes (e.g. `> [!IMPORTANT]`) for minimum toolchain requirements (e.g. Kotlin compiler versions).
+
+4. **Running the Sample App**
+   - Setup steps for sample/example applications, required setup files (e.g., config files or plists), and key demo components.
+
+5. **Usage Example**
+   - Practical, copy-pasteable Kotlin Multiplatform code snippets illustrating initialization and primary API usage.
+
+6. **Migration Guide** (if applicable)
+   - Target audience checklist.
+   - Namespace mapping table comparing upstream / alternative libraries with this library.
+   - Bullet points describing key API behavior changes (async/await models, event flows, platform defaults).
+
+7. **Platform Limitations & Constraints**
+   - Clear callouts for missing/partial platform APIs, memory actual fallbacks, or iOS/Android specific requirements.
+   - Code examples showing how users can guard platform-specific logic.
+
+8. **License**
+   - Standard Apache 2.0 license code block with explicit copyright line.
