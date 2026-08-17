@@ -34,11 +34,12 @@ import zone.ien.inputactions.InputActionIcon
 import zone.ien.inputactions.InputActionStyle
 import zone.ien.inputactions.InputActionsHost
 import zone.ien.inputactions.inputActions
+import zone.ien.utils.ui.foundation.IenTheme
+import zone.ien.utils.ui.screen.IenTopAppBarScaffold
 
 @Composable
-@Preview
 fun App() {
-    MaterialTheme {
+    IenTheme {
         InputActionsHost {
             InputActionsSample()
         }
@@ -269,5 +270,31 @@ private fun InputActionsSample() {
                 Text(text = "상태 초기화")
             }
         }
+    }
+}
+
+@Composable
+private fun SampleScreenBody(
+    modifier: Modifier = Modifier
+) {
+    var name by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    IenTopAppBarScaffold(
+        actions = listOf(),
+        modifier = modifier
+    ) { pv ->
+        Column(
+            modifier = Modifier.padding(pv)
+        ) {
+
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ScreenPreview() {
+    IenTheme {
+        SampleScreenBody()
     }
 }
