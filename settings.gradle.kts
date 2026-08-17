@@ -13,7 +13,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "ienground-kmp-library-template"
+rootProject.name = "ComposeInputActions"
 include(":library")
 include(":example")
 include(":example:androidApp")
