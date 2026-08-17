@@ -11,7 +11,11 @@ import androidx.compose.ui.Modifier
  * Internal host used by the Modifier API to keep the active action set.
  */
 internal interface InputActionHost {
-    fun registerActions(target: InputActionTarget, actions: List<InputAction>)
+    fun registerActions(
+        target: InputActionTarget,
+        actions: List<InputAction>,
+        style: InputActionsStyle = InputActionsStyle.Toolbar,
+    )
 
     fun unregisterActions(target: InputActionTarget)
 

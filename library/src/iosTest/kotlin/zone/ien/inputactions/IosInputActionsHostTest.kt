@@ -2,6 +2,8 @@ package zone.ien.inputactions
 
 import kotlinx.cinterop.BetaInteropApi
 import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.cinterop.useContents
+import platform.Foundation.NSProcessInfo
 import platform.UIKit.UIBarButtonItem
 import platform.UIKit.UIBarButtonItemStyle
 import platform.UIKit.UIToolbar
@@ -72,10 +74,96 @@ class IosInputActionsHostTest {
     }
 
     @Test
-    fun toolbarIsAbsentWhenNoActionsAreActive() {
+    fun pillStyleUsesTheSystemToolbar() {
         val host = IosInputActionsHost()
+        val target = InputActionTarget()
 
-        assertNull(host.createInputAccessoryView())
+        host.registerActions(
+            target,
+            listOf(InputAction(title = "Done", onClick = {})),
+            style = InputActionsStyle.Pill,
+        )
+
+        assertNotNull(host.createToolbar())
+    }
+
+    @Test
+    fun pillStyleKeepsDoneActionInTheSharedBackgroundGroup() {
+        val host = IosInputActionsHost()
+        val target = InputActionTarget()
+
+        host.registerActions(
+            target,
+            listOf(
+                InputAction(title = "Previous", onClick = {}),
+                InputAction(
+                    title = "Done",
+                    style = InputActionStyle.Done,
+                    onClick = {},
+                ),
+            ),
+            style = InputActionsStyle.Pill,
+        )
+
+        val items = assertNotNull(host.createToolbar()).items
+            .orEmpty()
+            .map { it as UIBarButtonItem }
+
+        assertEquals(UIBarButtonItemStyle.UIBarButtonItemStylePlain, items.last().style)
+        val majorVersion = NSProcessInfo.processInfo.operatingSystemVersion.useContents {
+            majorVersion.toInt()
+        }
+        if (majorVersion >= 26) {
+            assertTrue(items.all { it.sharesBackground })
+        }
+    }
+
+    @Test
+    fun toolbarUsesAnSfSymbolForAnIconAction() {
+        val host = IosInputActionsHost()
+        val target = InputActionTarget()
+
+        host.registerActions(
+            target,
+            listOf(
+                InputAction(
+                    title = "Previous",
+                    icon = InputActionIcon(systemName = "chevron.up"),
+                    onClick = {},
+                ),
+            ),
+        )
+
+        val item = assertNotNull(host.createToolbar()).items
+            .orEmpty()
+            .map { it as UIBarButtonItem }
+            .single()
+
+        assertNotNull(item.image)
+        assertEquals("Previous", item.title)
+    }
+
+    @Test
+    fun updatingActionsRefreshesTheExistingToolbarItems() {
+        val host = IosInputActionsHost()
+        val target = InputActionTarget()
+
+        host.registerActions(
+            target,
+            listOf(InputAction(title = "First", onClick = {})),
+        )
+        val toolbar = assertNotNull(host.createToolbar())
+
+        host.registerActions(
+            target,
+            listOf(InputAction(title = "Second", onClick = {})),
+        )
+
+        assertSame(toolbar, host.createToolbar())
+        val items = toolbar.items
+            .orEmpty()
+            .map { it as UIBarButtonItem }
+        assertEquals("Second", items.singleOrNull()?.title)
     }
 
     @Test
@@ -100,4 +188,12 @@ class IosInputActionsHostTest {
         assertTrue(container.allowsSelfSizing)
         assertEquals(52.0, container.reservedHeight, absoluteTolerance = 0.01)
     }
+
+    @Test
+    fun toolbarIsAbsentWhenNoActionsAreActive() {
+        val host = IosInputActionsHost()
+
+        assertNull(host.createInputAccessoryView())
+    }
+
 }

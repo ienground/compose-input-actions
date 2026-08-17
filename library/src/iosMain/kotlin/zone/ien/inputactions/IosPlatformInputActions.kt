@@ -39,8 +39,7 @@ internal actual fun ProvidePlatformInputActions(
         return
     }
 
-    val actionsVersion = iosHost.actionsVersion
-    val interceptor = remember(iosHost, actionsVersion) {
+    val interceptor = remember(iosHost) {
         IosInputActionsInterceptor(iosHost)
     }
 

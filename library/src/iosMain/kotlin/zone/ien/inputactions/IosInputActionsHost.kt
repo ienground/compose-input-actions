@@ -1,6 +1,5 @@
 package zone.ien.inputactions
 
-import androidx.compose.runtime.mutableStateOf
 import kotlinx.cinterop.BetaInteropApi
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.ObjCAction
@@ -11,6 +10,7 @@ import platform.Foundation.NSProcessInfo
 import platform.UIKit.UIBarButtonItem
 import platform.UIKit.UIBarButtonItemStyle
 import platform.UIKit.UIBarButtonSystemItem
+import platform.UIKit.UIImage
 import platform.UIKit.NSLayoutConstraint
 import platform.UIKit.UIInputView
 import platform.UIKit.UIInputViewStyle
@@ -31,29 +31,44 @@ private const val IOS26_TOOLBAR_BOTTOM_GAP = 8.0
  */
 @OptIn(ExperimentalForeignApi::class)
 internal class IosInputActionsHost : CommonInputActionsHost() {
-    private var actionsVersionState = mutableStateOf(0)
-    internal val actionsVersion: Int
-        get() = actionsVersionState.value
-
     private var toolbarTargets: List<IosInputActionTarget> = emptyList()
     private var currentToolbar: UIToolbar? = null
 
-    override fun registerActions(target: InputActionTarget, actions: List<InputAction>) {
-        super.registerActions(target, actions)
-        actionsVersionState.value++
-        currentToolbar = null
-        toolbarTargets = emptyList()
+    internal fun registerActions(target: InputActionTarget, actions: List<InputAction>) {
+        registerActions(target, actions, InputActionsStyle.Toolbar)
+    }
+
+    override fun registerActions(
+        target: InputActionTarget,
+        actions: List<InputAction>,
+        style: InputActionsStyle,
+    ) {
+        super.registerActions(target, actions, style)
+        val toolbar = currentToolbar
+        if (toolbar == null) {
+            toolbarTargets = emptyList()
+        } else if (registry.activeActions().isEmpty()) {
+            toolbar.setItems(emptyList<UIBarButtonItem>(), animated = false)
+            currentToolbar = null
+            toolbarTargets = emptyList()
+        } else {
+            updateToolbarItems(toolbar, registry.activeActions(), registry.activeStyle())
+        }
     }
 
     override fun unregisterActions(target: InputActionTarget) {
         super.unregisterActions(target)
-        actionsVersionState.value++
-        currentToolbar = null
-        toolbarTargets = emptyList()
+        val toolbar = currentToolbar
+        val actions = registry.activeActions()
+        if (toolbar == null || actions.isEmpty()) {
+            currentToolbar = null
+            toolbarTargets = emptyList()
+        } else {
+            updateToolbarItems(toolbar, actions, registry.activeStyle())
+        }
     }
 
     override fun dispose() {
-        actionsVersionState.value++
         currentToolbar = null
         toolbarTargets = emptyList()
         super.dispose()
@@ -61,10 +76,15 @@ internal class IosInputActionsHost : CommonInputActionsHost() {
 
     internal fun createInputAccessoryView(): UIView? {
         val toolbar = createToolbar() ?: return null
-        val majorVersion = NSProcessInfo.processInfo().operatingSystemVersion.useContents {
+        val majorVersion = NSProcessInfo.processInfo.operatingSystemVersion.useContents {
             majorVersion.toInt()
         }
-        return wrapToolbarForIosVersion(toolbar, majorVersion)
+        return when (registry.activeStyle()) {
+            // UIKit owns the visual treatment for both styles. On iOS 26 this allows the
+            // system toolbar appearance to provide its native Liquid Glass presentation.
+            InputActionsStyle.Toolbar,
+            InputActionsStyle.Pill -> wrapToolbarForIosVersion(toolbar, majorVersion)
+        }
     }
 
     internal fun createToolbar(): UIToolbar? {
@@ -75,6 +95,19 @@ internal class IosInputActionsHost : CommonInputActionsHost() {
             return null
         }
 
+        val toolbar = currentToolbar ?: UIToolbar().also {
+            it.sizeToFit()
+            currentToolbar = it
+        }
+        updateToolbarItems(toolbar, actions, registry.activeStyle())
+        return toolbar
+    }
+
+    private fun updateToolbarItems(
+        toolbar: UIToolbar,
+        actions: List<InputAction>,
+        presentationStyle: InputActionsStyle,
+    ) {
         val targets = actions
             .filterNot { it.style == InputActionStyle.FlexibleSpace }
             .map { action -> IosInputActionTarget(action.onClick) }
@@ -87,17 +120,15 @@ internal class IosInputActionsHost : CommonInputActionsHost() {
                     action = null,
                 )
             } else {
-                UIBarButtonItem(
-                    title = action.title,
-                    style = action.style.toUIBarButtonItemStyle(),
+                createBarButtonItem(
+                    action = action,
                     target = targets[targetIndex++],
-                    action = NSSelectorFromString(INPUT_ACTION_SELECTOR),
-                )
+                    presentationStyle = presentationStyle,
+                ).also { item ->
+                    item.configureSharedBackground(presentationStyle)
+                }
             }
         }
-
-        val toolbar = UIToolbar()
-        toolbar.sizeToFit()
         val hasExplicitFlexibleSpace = actions.any {
             it.style == InputActionStyle.FlexibleSpace
         }
@@ -115,10 +146,54 @@ internal class IosInputActionsHost : CommonInputActionsHost() {
             },
             animated = false,
         )
-
         toolbarTargets = targets
-        currentToolbar = toolbar
-        return toolbar
+    }
+
+    private fun createBarButtonItem(
+        action: InputAction,
+        target: IosInputActionTarget,
+        presentationStyle: InputActionsStyle,
+    ): UIBarButtonItem {
+        val style = action.style.toUIBarButtonItemStyle(presentationStyle)
+        val image = action.icon?.let { UIImage.systemImageNamed(it.systemName) }
+        val item = if (image != null) {
+            UIBarButtonItem(
+                image = image,
+                style = style,
+                target = target,
+                action = NSSelectorFromString(INPUT_ACTION_SELECTOR),
+            )
+        } else {
+            UIBarButtonItem(
+                title = action.title,
+                style = style,
+                target = target,
+                action = NSSelectorFromString(INPUT_ACTION_SELECTOR),
+            )
+        }
+        if (image != null && action.title.isNotBlank()) {
+            // UIBarButtonItem has no accessibilityLabel property; retain the human-readable
+            // title on the item so UIKit can expose it while rendering the SF Symbol.
+            item.title = action.title
+        }
+        return item
+    }
+}
+
+@OptIn(ExperimentalForeignApi::class)
+private fun UIBarButtonItem.configureSharedBackground(
+    presentationStyle: InputActionsStyle,
+) {
+    if (presentationStyle != InputActionsStyle.Pill) {
+        return
+    }
+
+    val majorVersion = NSProcessInfo.processInfo.operatingSystemVersion.useContents {
+        majorVersion.toInt()
+    }
+    if (majorVersion >= IOS26_MAJOR_VERSION) {
+        sharesBackground = true
+        hidesSharedBackground = false
     }
 }
 
@@ -141,10 +216,16 @@ internal fun wrapToolbarForIosVersion(
     )
 }
 
+/**
+ * Reserves the iOS 26 keyboard-to-toolbar gap without changing the toolbar's appearance.
+ *
+ * The container is intentionally transparent and only participates in layout. The nested
+ * [UIToolbar] remains the native accessory view that owns its system appearance.
+ */
 @OptIn(ExperimentalForeignApi::class)
 internal class IosToolbarAccessoryContainer(
-    private val toolbar: UIToolbar,
-    private val contentHeight: Double,
+    toolbar: UIToolbar,
+    contentHeight: Double,
     internal val bottomGap: Double,
 ) : UIInputView(
     frame = CGRectMake(0.0, 0.0, 0.0, contentHeight + bottomGap),
@@ -153,6 +234,9 @@ internal class IosToolbarAccessoryContainer(
     internal val reservedHeight: Double = contentHeight + bottomGap
 
     init {
+        // Compose's responder presents inputAccessoryView flush to the iOS 26 keyboard.
+        // Keep this layout-only wrapper isolated so the native UIToolbar appearance remains
+        // fully controlled by UIKit.
         allowsSelfSizing = true
         translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = null
@@ -171,10 +255,18 @@ internal class IosToolbarAccessoryContainer(
 }
 
 @OptIn(ExperimentalForeignApi::class)
-private fun InputActionStyle.toUIBarButtonItemStyle(): UIBarButtonItemStyle {
+private fun InputActionStyle.toUIBarButtonItemStyle(
+    presentationStyle: InputActionsStyle,
+): UIBarButtonItemStyle {
     return when (this) {
         InputActionStyle.Plain -> UIBarButtonItemStyle.UIBarButtonItemStylePlain
-        InputActionStyle.Done -> UIBarButtonItemStyle.UIBarButtonItemStyleDone
+        InputActionStyle.Done -> if (presentationStyle == InputActionsStyle.Pill) {
+            // iOS 26 aliases .done to .prominent, which intentionally breaks the shared
+            // Liquid Glass background. Pill keeps the completion action in the same group.
+            UIBarButtonItemStyle.UIBarButtonItemStylePlain
+        } else {
+            UIBarButtonItemStyle.UIBarButtonItemStyleDone
+        }
         InputActionStyle.FlexibleSpace -> error("FlexibleSpace does not have a button style")
     }
 }

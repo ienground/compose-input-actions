@@ -11,16 +11,23 @@ internal class InputActionTarget
 internal class InputActionRegistry {
     private val actionsByTarget = mutableMapOf<InputActionTarget, List<InputAction>>()
     private var activeTarget: InputActionTarget? = null
+    private var activeStyle: InputActionsStyle = InputActionsStyle.Toolbar
 
-    fun register(target: InputActionTarget, actions: List<InputAction>) {
+    fun register(
+        target: InputActionTarget,
+        actions: List<InputAction>,
+        style: InputActionsStyle = InputActionsStyle.Toolbar,
+    ) {
         actionsByTarget[target] = actions.toList()
         activeTarget = target
+        activeStyle = style
     }
 
     fun unregister(target: InputActionTarget) {
         actionsByTarget.remove(target)
         if (activeTarget === target) {
             activeTarget = null
+            activeStyle = InputActionsStyle.Toolbar
         }
     }
 
@@ -28,9 +35,14 @@ internal class InputActionRegistry {
         return activeTarget?.let(actionsByTarget::get).orEmpty()
     }
 
+    fun activeStyle(): InputActionsStyle {
+        return activeStyle
+    }
+
     fun clear() {
         actionsByTarget.clear()
         activeTarget = null
+        activeStyle = InputActionsStyle.Toolbar
     }
 }
 /**
@@ -39,8 +51,12 @@ internal class InputActionRegistry {
 internal open class CommonInputActionsHost : InputActionHost {
     protected val registry = InputActionRegistry()
 
-    override fun registerActions(target: InputActionTarget, actions: List<InputAction>) {
-        registry.register(target, actions)
+    override fun registerActions(
+        target: InputActionTarget,
+        actions: List<InputAction>,
+        style: InputActionsStyle,
+    ) {
+        registry.register(target, actions, style)
     }
 
     override fun unregisterActions(target: InputActionTarget) {

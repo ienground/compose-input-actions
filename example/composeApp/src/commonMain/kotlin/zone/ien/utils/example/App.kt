@@ -30,8 +30,10 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
 import zone.ien.inputactions.InputAction
+import zone.ien.inputactions.InputActionIcon
 import zone.ien.inputactions.InputActionStyle
 import zone.ien.inputactions.InputActionsHost
+import zone.ien.inputactions.InputActionsStyle
 import zone.ien.inputactions.inputActions
 
 @Composable
@@ -63,17 +65,24 @@ private fun InputActionsSample() {
         keyboardController,
     ) {
         listOf(
-            InputAction(title = "Next") {
+            InputAction(
+                title = "Next",
+                icon = InputActionIcon(systemName = "chevron.down"),
+            ) {
                 lastAction = "이름: Next"
                 emailFocusRequester.requestFocus()
             },
-            InputAction(title = "Clear") {
+            InputAction(
+                title = "Clear",
+                icon = InputActionIcon(systemName = "xmark.circle"),
+            ) {
                 lastAction = "이름: Clear"
                 name = ""
             },
             InputAction.FlexibleSpace,
             InputAction(
                 title = "Done",
+                icon = InputActionIcon(systemName = "checkmark"),
                 style = InputActionStyle.Done,
                 onClick = {
                     lastAction = "이름: Done"
@@ -91,14 +100,20 @@ private fun InputActionsSample() {
     ) {
         buildList {
             add(
-                InputAction(title = "Previous") {
+                InputAction(
+                    title = "Previous",
+                    icon = InputActionIcon(systemName = "chevron.up"),
+                ) {
                     lastAction = "이메일: Previous"
                     nameFocusRequester.requestFocus()
                 },
             )
             if (email.isNotEmpty()) {
                 add(
-                    InputAction(title = "Clear") {
+                    InputAction(
+                        title = "Clear",
+                        icon = InputActionIcon(systemName = "xmark.circle"),
+                    ) {
                         lastAction = "이메일: Clear"
                         email = ""
                     },
@@ -108,6 +123,7 @@ private fun InputActionsSample() {
             add(
                 InputAction(
                     title = "Done",
+                    icon = InputActionIcon(systemName = "checkmark"),
                     style = InputActionStyle.Done,
                     onClick = {
                         lastAction = "이메일: Done"
@@ -168,7 +184,10 @@ private fun InputActionsSample() {
                             focusedField = "이름"
                         }
                     }
-                    .inputActions(*nameActions.toTypedArray()),
+                    .inputActions(
+                        *nameActions.toTypedArray(),
+                        style = InputActionsStyle.Pill,
+                    ),
                 label = { Text("이름") },
                 placeholder = { Text("Next / Clear 액션") },
                 singleLine = true,
