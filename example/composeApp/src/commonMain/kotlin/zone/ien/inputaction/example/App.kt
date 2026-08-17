@@ -1,4 +1,4 @@
-package zone.ien.utils.example
+package zone.ien.inputaction.example
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

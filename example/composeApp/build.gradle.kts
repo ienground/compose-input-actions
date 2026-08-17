@@ -11,7 +11,7 @@ kotlin {
     jvmToolchain(17)
 
     androidLibrary {
-        namespace = "zone.ien.utils.example.shared"
+        namespace = "zone.ien.inputaction.example.shared"
         compileSdk = libs.versions.android.compileSdk.get().toInt()
         minSdk = libs.versions.android.minSdk.get().toInt()
 
@@ -36,12 +36,17 @@ kotlin {
             implementation(libs.compose.preview)
             implementation(libs.compose.resources)
 
-
             implementation(libs.lifecycle.viewmodel)
             implementation(libs.lifecycle.runtime)
 
+            implementation(libs.bundles.ienlab.cmp)
+
             implementation(project(":library"))
         }
+        androidMain.dependencies {
+            implementation(libs.compose.ui.tooling)
+        }
+
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }

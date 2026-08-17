@@ -1,4 +1,4 @@
-package zone.ien.utils.example
+package zone.ien.inputaction.example
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -16,10 +16,4 @@ class MainActivity : ComponentActivity() {
             App()
         }
     }
-}
-
-@Preview
-@Composable
-fun AppAndroidPreview() {
-    App()
 }
