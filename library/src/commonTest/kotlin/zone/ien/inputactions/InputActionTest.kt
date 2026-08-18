@@ -50,11 +50,24 @@ class InputActionTest {
     }
 
     @Test
+    fun inputActionCanRequestSharedBackgroundSeparation() {
+        val action = InputAction(
+            title = "Next",
+            separatesSharedBackground = true,
+            onClick = {},
+        )
+        val flexibleSpace = InputAction.FlexibleSpace(separatesSharedBackground = true)
+
+        assertTrue(action.separatesSharedBackground)
+        assertTrue(flexibleSpace.separatesSharedBackground)
+    }
+
+    @Test
     fun flexibleSpaceActionIsAvailableFromInputAction() {
         val action = InputAction.FlexibleSpace
 
         assertEquals("", action.title)
-        assertEquals(InputActionStyle.FlexibleSpace, action.style)
+        assertTrue(action.isFlexibleSpace)
         action.onClick()
     }
 

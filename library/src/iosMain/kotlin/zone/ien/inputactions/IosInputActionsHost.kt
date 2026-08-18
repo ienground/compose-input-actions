@@ -95,11 +95,16 @@ internal class IosInputActionsHost : CommonInputActionsHost() {
         actions: List<InputAction>,
     ) {
         val targets = actions
-            .filterNot { it.style == InputActionStyle.FlexibleSpace }
+            .filterNot { it.isFlexibleSpace }
             .map { action -> IosInputActionTarget(action.onClick) }
         var targetIndex = 0
-        val buttons = actions.map { action ->
-            if (action.style == InputActionStyle.FlexibleSpace) {
+        val itemGroups = actions.map { action ->
+            val separator = if (action.separatesSharedBackground) {
+                createFixedSpaceItem()
+            } else {
+                null
+            }
+            val item = if (action.isFlexibleSpace) {
                 createFlexibleSpaceItem(action.hidesSharedBackground)
             } else {
                 createBarButtonItem(
@@ -107,21 +112,34 @@ internal class IosInputActionsHost : CommonInputActionsHost() {
                     target = targets[targetIndex++],
                 )
             }
+            if (action.isFlexibleSpace) {
+                listOf(item) + listOfNotNull(separator)
+            } else {
+                listOfNotNull(separator) + item
+            }
         }
         val hasExplicitFlexibleSpace = actions.any {
-            it.style == InputActionStyle.FlexibleSpace
+            it.isFlexibleSpace
         }
-        toolbar.setItems(
-            if (!hasExplicitFlexibleSpace && buttons.size > 1) {
-                buttons.dropLast(1) +
-                    createFlexibleSpaceItem() +
-                    buttons.last()
-            } else {
-                buttons
-            },
-            animated = false,
-        )
+        val items = itemGroups.flatten().toMutableList()
+        if (!hasExplicitFlexibleSpace && actions.size > 1) {
+            val finalGroupStart = itemGroups
+                .dropLast(1)
+                .sumOf { it.size }
+            items.add(finalGroupStart, createFlexibleSpaceItem())
+        }
+        toolbar.setItems(items, animated = false)
         toolbarTargets = targets
+    }
+
+    private fun createFixedSpaceItem(): UIBarButtonItem? {
+        val majorVersion = NSProcessInfo.processInfo.operatingSystemVersion.useContents {
+            majorVersion.toInt()
+        }
+        if (majorVersion < IOS26_MAJOR_VERSION) {
+            return null
+        }
+        return UIBarButtonItem.fixedSpaceItem()
     }
 
     private fun createFlexibleSpaceItem(
@@ -243,7 +261,6 @@ private fun InputActionStyle.toUIBarButtonItemStyle(): UIBarButtonItemStyle {
     return when (this) {
         InputActionStyle.Plain -> UIBarButtonItemStyle.UIBarButtonItemStylePlain
         InputActionStyle.Done -> UIBarButtonItemStyle.UIBarButtonItemStyleDone
-        InputActionStyle.FlexibleSpace -> error("FlexibleSpace does not have a button style")
     }
 }
 
