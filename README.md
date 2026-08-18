@@ -8,12 +8,12 @@
 
 [![Kotlin](https://img.shields.io/badge/kotlin-2.4.0-blue.svg)](https://kotlinlang.org)
 [![Compose Multiplatform](https://img.shields.io/badge/Compose%20Multiplatform-1.11.1-blue)](https://github.com/JetBrains/compose-multiplatform)
-[![Platform](https://img.shields.io/badge/platform-android%20%7C%20ios-lightgrey.svg)](https://kotlinlang.org/docs/multiplatform.html)
+[![Platform](https://img.shields.io/badge/platform-android%20%7C%20ios%20%7C%20desktop%20%7C%20macos-lightgrey.svg)](https://kotlinlang.org/docs/multiplatform.html)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 
 A Kotlin Multiplatform (KMP) library that brings native platform text-input actions and accessory toolbars to Compose Multiplatform `TextField`s.
 
-On iOS, it attaches native `UIToolbar` keyboard accessory views directly to the active native text responder owned by Compose, while preserving full Compose ownership of your text state and focus lifecycle. On Android, it gracefully passes through without altering standard IME behavior.
+On iOS, it attaches native `UIToolbar` keyboard accessory views directly to the active native text responder owned by Compose, while preserving full Compose ownership of your text state and focus lifecycle. On Android, Desktop (JVM), and macOS, it gracefully passes through (no-op) without altering standard text editing behavior, ensuring full cross-platform compatibility across your shared Compose code.
 
 ---
 
@@ -22,18 +22,18 @@ On iOS, it attaches native `UIToolbar` keyboard accessory views directly to the 
 - **Compose-Idiomatic Modifier API**: Easily attach native actions to any Compose `TextField` using `Modifier.inputActions(...)`.
 - **Focus-Aware Lifecycle**: Automatically presents and dismisses action toolbars when fields gain or lose focus.
 - **SF Symbols & Custom Items**: Support for native iOS icons via SF Symbols, plain/done item styles, and flexible spacers (`InputAction.FlexibleSpace`).
-- **Common Source Compatibility**: Wrap your UI tree with `InputActionsHost` inside `commonMain` for cross-platform compatibility.
+- **Cross-Platform Compatibility**: Supports **iOS**, **Android**, **Desktop (JVM)**, and **macOS** target platforms. Wrap your UI tree with `InputActionsHost` inside `commonMain` for seamless multiplatform deployment.
 
 ### Supported Features & Platforms Matrix
 
-| Feature | Android Support | iOS Support | Completion Rate | Under the Hood |
-| :--- | :---: | :---: | :---: | :--- |
-| **InputActionsHost** | 🟢 Yes | 🟢 Yes | **100%** | Common CompositionLocal host providing active action registries |
-| **Modifier.inputActions** | 🟢 Yes | 🟢 Yes | **100%** | Modifier Node listening to `FocusEventModifierNode` events |
-| **Plain & Emphasized Actions** | 🟡 No-op | 🟢 Yes | **95%** | Native `UIBarButtonItem` with `Plain` / `Done` styles |
-| **Icon Actions (SF Symbols)** | 🟡 No-op | 🟢 Yes | **95%** | `UIImage.systemImageNamed(...)` on iOS |
-| **Flexible Spacers** | 🟡 No-op | 🟢 Yes | **100%** | `UIBarButtonItem(barButtonSystemItem: .flexibleSpace)` |
-| **Dynamic Action Updates** | 🟢 Yes | 🟢 Yes | **90%** | Real-time toolbar item array updates during focus |
+| Feature | iOS | Android | Desktop (JVM) | macOS | Completion Rate | Under the Hood |
+| :--- | :---: | :---: | :---: | :---: | :---: | :--- |
+| **InputActionsHost** | 🟢 Yes | 🟢 Yes | 🟢 Yes | 🟢 Yes | **100%** | Common CompositionLocal host providing active action registries |
+| **Modifier.inputActions** | 🟢 Yes | 🟢 Yes | 🟢 Yes | 🟢 Yes | **100%** | Modifier Node listening to `FocusEventModifierNode` events |
+| **Plain & Emphasized Actions** | 🟢 Yes | 🟡 No-op | 🟡 No-op | 🟡 No-op | **95%** | Native `UIBarButtonItem` with `Plain` / `Done` styles on iOS |
+| **Icon Actions (SF Symbols)** | 🟢 Yes | 🟡 No-op | 🟡 No-op | 🟡 No-op | **95%** | `UIImage.systemImageNamed(...)` on iOS |
+| **Flexible Spacers** | 🟢 Yes | 🟡 No-op | 🟡 No-op | 🟡 No-op | **100%** | `UIBarButtonItem(barButtonSystemItem: .flexibleSpace)` on iOS |
+| **Dynamic Action Updates** | 🟢 Yes | 🟢 Yes | 🟢 Yes | 🟢 Yes | **90%** | Real-time toolbar item array updates during focus |
 
 ---
 

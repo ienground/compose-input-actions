@@ -8,12 +8,12 @@
 
 [![Kotlin](https://img.shields.io/badge/kotlin-2.4.0-blue.svg)](https://kotlinlang.org)
 [![Compose Multiplatform](https://img.shields.io/badge/Compose%20Multiplatform-1.11.1-blue)](https://github.com/JetBrains/compose-multiplatform)
-[![Platform](https://img.shields.io/badge/platform-android%20%7C%20ios-lightgrey.svg)](https://kotlinlang.org/docs/multiplatform.html)
+[![Platform](https://img.shields.io/badge/platform-android%20%7C%20ios%20%7C%20desktop%20%7C%20macos-lightgrey.svg)](https://kotlinlang.org/docs/multiplatform.html)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 
 Compose Multiplatform의 `TextField` / `BasicTextField`에 플랫폼 네이티브 텍스트 입력 액션 및 키보드 악세서리 툴바를 제공하는 Kotlin Multiplatform (KMP) 라이브러리입니다.
 
-iOS 환경에서는 Compose가 소유한 텍스트 입력 상태와 포커스 라이프사이클을 그대로 유지하면서, 키보드 상단에 네이티브 `UIToolbar` 액세서리 뷰를 동적으로 연결합니다. Android 환경에서는 기존 IME 동작을 방해하지 않고 안전하게 통과(no-op) 처리됩니다.
+iOS 환경에서는 Compose가 소유한 텍스트 입력 상태와 포커스 라이프사이클을 그대로 유지하면서, 키보드 상단에 네이티브 `UIToolbar` 액세서리 뷰를 동적으로 연결합니다. Android, Desktop (JVM), macOS 환경에서는 기존 입력 및 IME 동작을 방해하지 않고 안전하게 통과(no-op) 처리하여 공통 Compose 코드베이스 전체에서 완벽한 멀티플랫폼 호환성을 보장합니다.
 
 ---
 
@@ -22,18 +22,18 @@ iOS 환경에서는 Compose가 소유한 텍스트 입력 상태와 포커스 �
 - **Compose 관용적 Modifier API**: `Modifier.inputActions(...)`를 통해 Compose `TextField`에 손쉽게 네이티브 액션을 부착합니다.
 - **포커스 연동 라이프사이클**: 텍스트 필드의 포커스 획득 및 상실 시 자동으로 툴바를 표시하거나 해제합니다.
 - **SF Symbols 및 커스텀 항목**: SF Symbol 기반 네이티브 아이콘, Plain/Done 스타일, 가변 간격 요소(`InputAction.FlexibleSpace`)를 지원합니다.
-- **공통 소스 세트 지원**: `commonMain` 영역에서 `InputActionsHost`로 UI 트리를 감싸 크로스 플랫폼 호환성을 제공합니다.
+- **크로스 플랫폼 타깃 지원**: **iOS**, **Android**, **Desktop (JVM)**, **macOS** 타깃을 공식 지원합니다. `commonMain` 영역에서 `InputActionsHost`로 UI 트리를 감싸 손쉽게 멀티플랫폼에 적용할 수 있습니다.
 
 ### 지원 기능 및 플랫폼 매트릭스
 
-| 기능 | Android 지원 | iOS 지원 | 완성도 | 구현 방식 |
-| :--- | :---: | :---: | :---: | :--- |
-| **InputActionsHost** | 🟢 지원 | 🟢 지원 | **100%** | 활성 액션 레지스트리를 공급하는 공통 CompositionLocal 호스트 |
-| **Modifier.inputActions** | 🟢 지원 | 🟢 지원 | **100%** | `FocusEventModifierNode` 이벤트를 감지하는 Modifier Node |
-| **Plain & Done 액션** | 🟡 No-op | 🟢 지원 | **95%** | iOS `Plain` / `Done` 스타일의 네이티브 `UIBarButtonItem` |
-| **아이콘 액션 (SF Symbols)** | 🟡 No-op | 🟢 지원 | **95%** | iOS `UIImage.systemImageNamed(...)` 연동 |
-| **Flexible Spacers** | 🟡 No-op | 🟢 지원 | **100%** | `UIBarButtonItem(barButtonSystemItem: .flexibleSpace)` |
-| **동적 액션 업데이트** | 🟢 지원 | 🟢 지원 | **90%** | 포커스 유지 중 액션 목록 변경 시 툴바 아이템 실시간 갱신 |
+| 기능 | iOS | Android | Desktop (JVM) | macOS | 완성도 | 구현 방식 |
+| :--- | :---: | :---: | :---: | :---: | :---: | :--- |
+| **InputActionsHost** | 🟢 지원 | 🟢 지원 | 🟢 지원 | 🟢 지원 | **100%** | 활성 액션 레지스트리를 공급하는 공통 CompositionLocal 호스트 |
+| **Modifier.inputActions** | 🟢 지원 | 🟢 지원 | 🟢 지원 | 🟢 지원 | **100%** | `FocusEventModifierNode` 이벤트를 감지하는 Modifier Node |
+| **Plain & Done 액션** | 🟢 지원 | 🟡 No-op | 🟡 No-op | 🟡 No-op | **95%** | iOS `Plain` / `Done` 스타일의 네이티브 `UIBarButtonItem` |
+| **아이콘 액션 (SF Symbols)** | 🟢 지원 | 🟡 No-op | 🟡 No-op | 🟡 No-op | **95%** | iOS `UIImage.systemImageNamed(...)` 연동 |
+| **Flexible Spacers** | 🟢 지원 | 🟡 No-op | 🟡 No-op | 🟡 No-op | **100%** | iOS `UIBarButtonItem(barButtonSystemItem: .flexibleSpace)` |
+| **동적 액션 업데이트** | 🟢 지원 | 🟢 지원 | 🟢 지원 | 🟢 지원 | **90%** | 포커스 유지 중 액션 목록 변경 시 툴바 아이템 실시간 갱신 |
 
 ---
 
