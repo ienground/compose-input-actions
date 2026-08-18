@@ -20,14 +20,14 @@ iOS 환경에서는 Compose가 소유한 텍스트 입력 상태와 포커스 �
 ## 스크린샷
 
 <p align="center">
-  <img src="images/sample_01_ko.png" width="30%" alt="샘플 1" />
-  <img src="images/sample_02_ko.png" width="30%" alt="샘플 2" />
-  <img src="images/sample_03_ko.png" width="30%" alt="샘플 3" />
+  <img src="images/sample_01_ko.PNG" width="30%" alt="샘플 1" />
+  <img src="images/sample_02_ko.PNG" width="30%" alt="샘플 2" />
+  <img src="images/sample_03_ko.PNG" width="30%" alt="샘플 3" />
 </p>
 <p align="center">
-  <img src="images/sample_04_ko.png" width="30%" alt="샘플 4" />
-  <img src="images/sample_05_ko.png" width="30%" alt="샘플 5" />
-  <img src="images/sample_06_ko.png" width="30%" alt="샘플 6" />
+  <img src="images/sample_04_ko.PNG" width="30%" alt="샘플 4" />
+  <img src="images/sample_05_ko.PNG" width="30%" alt="샘플 5" />
+  <img src="images/sample_06_ko.PNG" width="30%" alt="샘플 6" />
 </p>
 
 ## 주요 기능
