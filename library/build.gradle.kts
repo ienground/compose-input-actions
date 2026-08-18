@@ -26,10 +26,12 @@ kotlin {
             sourceSetTreeName = "test"
         }
 
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_17)
-        }
-    }
+       compilerOptions {
+           jvmTarget.set(JvmTarget.JVM_17)
+       }
+   }
+    jvm()
+    macosArm64()
     iosArm64()
     iosSimulatorArm64()
 
