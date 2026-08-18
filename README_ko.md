@@ -109,6 +109,7 @@ class InputAction(
     val style: InputActionStyle = InputActionStyle.Plain,
     val icon: InputActionIcon? = null,
     val hidesSharedBackground: Boolean = false,
+    val separatesSharedBackground: Boolean = false,
     val onClick: () -> Unit,
 )
 ```
@@ -116,14 +117,19 @@ class InputAction(
 | 프로퍼티 | 타입 | 기본값 | 설명 |
 | :--- | :--- | :--- | :--- |
 | `title` | `String` | `""` | 액션 버튼에 표시될 텍스트 라벨입니다. 아이콘 전용 버튼인 경우 빈 값일 수 있으며, `FlexibleSpace`에서는 무시됩니다. |
-| `style` | `InputActionStyle` | `InputActionStyle.Plain` | 버튼 표시 스타일 (`Plain`, `Done`, `FlexibleSpace`). |
+| `style` | `InputActionStyle` | `InputActionStyle.Plain` | 버튼 표시 스타일 (`Plain`, `Done`). |
+| `isFlexibleSpace` | `Boolean` | `false` | 해당 항목이 가변 스페이서인지(`true`), 일반 액션 버튼인지(`false`) 여부를 나타냅니다. |
 | `icon` | `InputActionIcon?` | `null` | 옵셔널 네이티브 아이콘. iOS 환경에서 SF Symbol 아이콘을 표시합니다. |
 | `hidesSharedBackground` | `Boolean` | `false` | iOS 26+ 이상에서 해당 버튼/그룹의 공유 툴바 배경 제외 여부를 설정합니다. |
+| `separatesSharedBackground` | `Boolean` | `false` | iOS 26+ 이상에서 양쪽 그룹의 배경은 유지하면서 시스템 분리자를 삽입합니다. |
 | `onClick` | `() -> Unit` | **필수** | 액션 버튼이 클릭/탭되었을 때 실행할 콜백입니다. `FlexibleSpace`에서는 무시됩니다. |
 
 #### 팩토리 헬퍼 메서드
 - **`InputAction.FlexibleSpace`**: 버튼 간 가변 간격을 배치하는 기본 스페이서.
-- **`InputAction.FlexibleSpace(hidesSharedBackground: Boolean = false)`**: 배경 분리 옵션을 포함한 가변 스페이서 생성.
+- **`InputAction.FlexibleSpace(separatesSharedBackground: Boolean = false)`**: 양쪽 그룹의 배경을 유지하면서 시스템 분리자를 추가하는 가변 스페이서. iOS 26+에서는 `UIBarButtonItem.fixedSpaceItem()`을 사용합니다.
+
+`hidesSharedBackground`는 해당 항목의 공유 배경을 실제로 숨기는 옵션입니다. 배경을 유지한
+채 그룹만 나누려면 `separatesSharedBackground`를 사용하세요.
 
 ---
 
@@ -134,8 +140,7 @@ class InputAction(
 | 값 | 설명 |
 | :--- | :--- |
 | `Plain` | 일반적인 텍스트/아이콘 버튼 스타일입니다. |
-| `Done` | 두껍고 강조된 완료/기남 작업 버튼 스타일입니다. |
-| `FlexibleSpace` | 탭 불가능한 가변 간격 구분선 요소로, 버튼들을 좌/우/중앙으로 배치할 때 사용합니다. |
+| `Done` | 두껍고 강조된 완료/확인 작업 버튼 스타일입니다. |
 
 ---
 
@@ -196,7 +201,7 @@ fun RegistrationScreen() {
                             icon = InputActionIcon(systemName = "chevron.down"),
                             onClick = { emailFocusRequester.requestFocus() },
                         ),
-                        InputAction.FlexibleSpace(hidesSharedBackground = true),
+                        InputAction.FlexibleSpace(separatesSharedBackground = true),
                         InputAction(
                             title = "완료",
                             style = InputActionStyle.Done,

@@ -109,6 +109,7 @@ class InputAction(
     val style: InputActionStyle = InputActionStyle.Plain,
     val icon: InputActionIcon? = null,
     val hidesSharedBackground: Boolean = false,
+    val separatesSharedBackground: Boolean = false,
     val onClick: () -> Unit,
 )
 ```
@@ -116,14 +117,45 @@ class InputAction(
 | Property | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
 | `title` | `String` | `""` | Text label displayed on the action button. Can be empty for icon-only actions; ignored for `FlexibleSpace`. |
-| `style` | `InputActionStyle` | `InputActionStyle.Plain` | Presentation style (`Plain`, `Done`, or `FlexibleSpace`). |
+| `style` | `InputActionStyle` | `InputActionStyle.Plain` | Presentation style (`Plain` or `Done`). |
+| `isFlexibleSpace` | `Boolean` | `false` | Indicates whether this item is a flexible spacer (`true`) or action button (`false`). |
 | `icon` | `InputActionIcon?` | `null` | Optional platform icon. Displays an SF Symbol icon when specified on iOS. |
-| `hidesSharedBackground` | `Boolean` | `false` | Specifies whether the item opts out of the shared bar background on iOS 26+. |
+| `hidesSharedBackground` | `Boolean` | `false` | Hides the item's shared toolbar background on iOS 26+. This is different from separating two visible groups. |
+| `separatesSharedBackground` | `Boolean` | `false` | Inserts UIKit's zero-width `fixedSpaceItem()` on iOS 26+ so adjacent groups keep their own backgrounds. |
 | `onClick` | `() -> Unit` | **Required** | Callback executed when the action button is tapped. Ignored for `FlexibleSpace`. |
 
 #### Companion Factories
 - **`InputAction.FlexibleSpace`**: Standard flexible spacer dividing buttons.
-- **`InputAction.FlexibleSpace(hidesSharedBackground: Boolean = false)`**: Flexible spacer with background separation preference.
+- **`InputAction.FlexibleSpace(separatesSharedBackground: Boolean = false)`**: Flexible spacer with optional system group separation. This uses `UIBarButtonItem.fixedSpaceItem()` on iOS 26+.
+
+#### Shared Background Groups
+
+`separatesSharedBackground` keeps both backgrounds visible and adds a system separator between
+two groups. It does not create a custom background, blur, or corner treatment.
+
+- For a regular `InputAction`, the separator is placed immediately before that action. Put the
+  option on the first action of the group that should begin after the boundary.
+- For `InputAction.FlexibleSpace(separatesSharedBackground = true)`, the flexible gap remains and
+  the separator is placed after that gap.
+- When no `FlexibleSpace` is supplied and there are multiple actions, the library automatically
+  inserts a flexible space before the final action. Use an explicit `FlexibleSpace` when the
+  boundary needs to be unambiguous.
+- On iOS versions before 26, the option has no system separator equivalent and the regular
+  `UIToolbar` appearance is retained.
+
+For example, this keeps `Next` and `Clear` in the left group and starts a separate `Done` group:
+
+```kotlin
+Modifier.inputActions(
+    InputAction(title = "Next", onClick = { /* ... */ }),
+    InputAction(title = "Clear", onClick = { /* ... */ }),
+    InputAction.FlexibleSpace(separatesSharedBackground = true),
+    InputAction(title = "Done", style = InputActionStyle.Done, onClick = { /* ... */ }),
+)
+```
+
+Use `hidesSharedBackground` only when the intended result is to remove an item's shared
+background entirely.
 
 ---
 
@@ -135,7 +167,6 @@ Determines the visual appearance and behavior of an `InputAction`.
 | :--- | :--- |
 | `Plain` | Standard, non-emphasized action button style. |
 | `Done` | Emphasized, bold completion action button style. |
-| `FlexibleSpace` | Non-tappable flexible space divider positioning items to the left, center, or right. |
 
 ---
 
@@ -196,7 +227,7 @@ fun RegistrationScreen() {
                             icon = InputActionIcon(systemName = "chevron.down"),
                             onClick = { emailFocusRequester.requestFocus() },
                         ),
-                        InputAction.FlexibleSpace(hidesSharedBackground = true),
+                        InputAction.FlexibleSpace(separatesSharedBackground = true),
                         InputAction(
                             title = "Done",
                             style = InputActionStyle.Done,

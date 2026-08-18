@@ -119,7 +119,7 @@ class IosInputActionsHostTest {
     }
 
     @Test
-    fun flexibleSpaceCanHideTheSharedBackground() {
+    fun flexibleSpaceCanSeparateSharedBackgroundWithoutHidingIt() {
         val host = IosInputActionsHost()
         val target = InputActionTarget()
 
@@ -127,7 +127,7 @@ class IosInputActionsHostTest {
             target,
             listOf(
                 InputAction(title = "Previous", onClick = {}),
-                InputAction.flexibleSpace(hidesSharedBackground = true),
+                InputAction.FlexibleSpace(separatesSharedBackground = true),
                 InputAction(title = "Done", onClick = {}),
             ),
         )
@@ -139,8 +139,47 @@ class IosInputActionsHostTest {
             majorVersion.toInt()
         }
         if (majorVersion >= 26) {
-            assertFalse(items[1].sharesBackground)
-            assertTrue(items[1].hidesSharedBackground)
+            assertEquals(4, items.size)
+            assertTrue(items.first().sharesBackground)
+            assertTrue(items.last().sharesBackground)
+            assertFalse(items.first().hidesSharedBackground)
+            assertFalse(items.last().hidesSharedBackground)
+        } else {
+            assertEquals(3, items.size)
+        }
+    }
+
+    @Test
+    fun actionCanSeparateSharedBackgroundWithoutHidingIt() {
+        val host = IosInputActionsHost()
+        val target = InputActionTarget()
+
+        host.registerActions(
+            target,
+            listOf(
+                InputAction(title = "Previous", onClick = {}),
+                InputAction(
+                    title = "Done",
+                    separatesSharedBackground = true,
+                    onClick = {},
+                ),
+            ),
+        )
+
+        val items = assertNotNull(host.createToolbar()).items
+            .orEmpty()
+            .map { it as UIBarButtonItem }
+        val majorVersion = NSProcessInfo.processInfo.operatingSystemVersion.useContents {
+            majorVersion.toInt()
+        }
+        if (majorVersion >= 26) {
+            assertEquals(4, items.size)
+            assertTrue(items.first().sharesBackground)
+            assertTrue(items.last().sharesBackground)
+            assertFalse(items.first().hidesSharedBackground)
+            assertFalse(items.last().hidesSharedBackground)
+        } else {
+            assertEquals(3, items.size)
         }
     }
 
