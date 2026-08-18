@@ -17,6 +17,19 @@ On iOS, it attaches native `UIToolbar` keyboard accessory views directly to the 
 
 ---
 
+## Screenshots
+
+<p align="center">
+  <img src="images/sample_01_en.png" width="30%" alt="Sample 1" />
+  <img src="images/sample_02_en.png" width="30%" alt="Sample 2" />
+  <img src="images/sample_03_en.png" width="30%" alt="Sample 3" />
+</p>
+<p align="center">
+  <img src="images/sample_04_en.png" width="30%" alt="Sample 4" />
+  <img src="images/sample_05_en.png" width="30%" alt="Sample 5" />
+  <img src="images/sample_06_en.png" width="30%" alt="Sample 6" />
+</p>
+
 ## Features
 
 - **Compose-Idiomatic Modifier API**: Easily attach native actions to any Compose `TextField` using `Modifier.inputActions(...)`.
