@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "zone.ien.utils.example"
+    namespace = "zone.ien.inputaction.example"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "zone.ien.utils.example"
+        applicationId = "zone.ien.inputaction.example"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
@@ -37,4 +37,5 @@ dependencies {
     implementation(project(":example:composeApp"))
     implementation(libs.activity.compose)
     implementation(libs.compose.preview)
+    debugImplementation(libs.compose.ui.tooling)
 }

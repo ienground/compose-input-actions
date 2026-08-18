@@ -1,0 +1,17 @@
+<resources>
+    <string name="lib_name">Compose Input Actions</string>
+    <string name="app_name">Compose Input Actions 예시</string>
+
+    <string name="button_prev">이전</string>
+    <string name="button_next">다음</string>
+    <string name="button_done">완료</string>
+    <string name="button_clear">지우기</string>
+    <string name="button_sample">샘플</string>
+
+    <string name="section_standard_text_buttons">표준 텍스트 버튼 배치 + 완료 버튼</string>
+    <string name="section_seperate_text_buttons">분리형 텍스트 버튼 배치 + 완료 버튼</string>
+    <string name="section_single_text_button">단독 텍스트 버튼 배치</string>
+    <string name="section_standard_icon_buttons">표준 아이콘 버튼 배치 + 완료 버튼</string>
+    <string name="section_pill_icon_buttons">통합형 아이콘 버튼 배치 + 완료 버튼</string>
+    <string name="section_seperate_icon_buttons">의도적 분리형 아이콘 버튼 배치 + 완료 버튼</string>
+</resources>
