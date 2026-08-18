@@ -12,10 +12,14 @@ plugins {
 group = "zone.ien.inputactions"
 version = libs.versions.lib.version.name.get()
 
+dokka {
+    moduleName.set("Compose Input Actions")
+}
+
 kotlin {
     jvmToolchain(17)
 
-    androidLibrary {
+    android {
         namespace = "zone.ien.inputactions"
         compileSdk = libs.versions.android.compileSdk.get().toInt()
         minSdk = libs.versions.android.minSdk.get().toInt()
@@ -49,7 +53,7 @@ kotlin {
 }
 
 mavenPublishing {
-    publishToMavenCentral()
+    publishToMavenCentral(automaticRelease = true)
 
     signAllPublications()
 
