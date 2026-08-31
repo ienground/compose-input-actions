@@ -1,16 +1,16 @@
 [versions]
-agp = "9.1.0"
-kotlin = "2.4.10"
+agp = "9.1.1"
+kotlin = "2.4.20-RC2"
 android-minSdk = "29"
 android-compileSdk = "37"
 android-targetSdk = "37"
-lib-version-name = "0.9.0-alpha01"
+lib-version-name = "0.9.0-alpha02"
 
 ienlab-cmp = "3.3.0"
 
 # plugin
-compose-plugin = "1.11.1"
-compose-material3 = "1.11.0-alpha07"
+compose-plugin = "1.12.0"
+compose-material3 = "1.12.0-alpha03"
 androidx-compose-tooling = "1.12.0"
 
 # ui
