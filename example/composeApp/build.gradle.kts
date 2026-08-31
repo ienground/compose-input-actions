@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -32,6 +33,13 @@ kotlin {
             isStatic = true
         }
     }
+
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs {
+        outputModuleName = "composeApp"
+        browser()
+        binaries.executable()
+    }
     
     sourceSets {
         commonMain.dependencies {
@@ -42,7 +50,8 @@ kotlin {
             implementation(libs.lifecycle.viewmodel)
             implementation(libs.lifecycle.runtime)
 
-            implementation(libs.bundles.ienlab.cmp)
+            implementation(libs.cmp.common)
+            implementation(libs.cmp.ui)
 
             implementation(project(":library"))
         }
