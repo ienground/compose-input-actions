@@ -6,14 +6,14 @@
 
 **English** | [한국어](README_ko.md)
 
-[![Kotlin](https://img.shields.io/badge/kotlin-2.4.0-blue.svg)](https://kotlinlang.org)
-[![Compose Multiplatform](https://img.shields.io/badge/Compose%20Multiplatform-1.11.1-blue)](https://github.com/JetBrains/compose-multiplatform)
-[![Platform](https://img.shields.io/badge/platform-android%20%7C%20ios%20%7C%20desktop%20%7C%20macos-lightgrey.svg)](https://kotlinlang.org/docs/multiplatform.html)
+[![Kotlin](https://img.shields.io/badge/kotlin-2.4.20--RC2-blue.svg)](https://kotlinlang.org)
+[![Compose Multiplatform](https://img.shields.io/badge/Compose%20Multiplatform-1.12.0-blue)](https://github.com/JetBrains/compose-multiplatform)
+[![Platform](https://img.shields.io/badge/platform-android%20%7C%20ios%20%7C%20desktop%20%7C%20macos%20%7C%20wasmJs-lightgrey.svg)](https://kotlinlang.org/docs/multiplatform.html)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 
 A Kotlin Multiplatform (KMP) library that brings native platform text-input actions and accessory toolbars to Compose Multiplatform `TextField`s.
 
-On iOS, it attaches native `UIToolbar` keyboard accessory views directly to the active native text responder owned by Compose, while preserving full Compose ownership of your text state and focus lifecycle. On Android, Desktop (JVM), and macOS, it gracefully passes through (no-op) without altering standard text editing behavior, ensuring full cross-platform compatibility across your shared Compose code.
+On iOS, it attaches native `UIToolbar` keyboard accessory views directly to the active native text responder owned by Compose, while preserving full Compose ownership of your text state and focus lifecycle. On Android, Desktop (JVM), macOS, and Web (Wasm JS), it gracefully passes through (no-op) without altering standard text editing behavior, ensuring full cross-platform compatibility across your shared Compose code.
 
 ---
 
@@ -35,18 +35,18 @@ On iOS, it attaches native `UIToolbar` keyboard accessory views directly to the 
 - **Compose-Idiomatic Modifier API**: Easily attach native actions to any Compose `TextField` using `Modifier.inputActions(...)`.
 - **Focus-Aware Lifecycle**: Automatically presents and dismisses action toolbars when fields gain or lose focus.
 - **SF Symbols & Custom Items**: Support for native iOS icons via SF Symbols, plain/done item styles, and flexible spacers (`InputAction.FlexibleSpace`).
-- **Cross-Platform Compatibility**: Supports **iOS**, **Android**, **Desktop (JVM)**, and **macOS** target platforms. Wrap your UI tree with `InputActionsHost` inside `commonMain` for seamless multiplatform deployment.
+- **Cross-Platform Compatibility**: Supports **iOS**, **Android**, **Desktop (JVM)**, **macOS**, and **Web (Wasm JS)** target platforms. Wrap your UI tree with `InputActionsHost` inside `commonMain` for seamless multiplatform deployment.
 
 ### Supported Features & Platforms Matrix
 
-| Feature | iOS | Android | Desktop (JVM) | macOS | Completion Rate | Under the Hood |
-| :--- | :---: | :---: | :---: | :---: | :---: | :--- |
-| **InputActionsHost** | 🟢 Yes | 🟢 Yes | 🟢 Yes | 🟢 Yes | **100%** | Common CompositionLocal host providing active action registries |
-| **Modifier.inputActions** | 🟢 Yes | 🟢 Yes | 🟢 Yes | 🟢 Yes | **100%** | Modifier Node listening to `FocusEventModifierNode` events |
-| **Plain & Emphasized Actions** | 🟢 Yes | 🟡 No-op | 🟡 No-op | 🟡 No-op | **95%** | Native `UIBarButtonItem` with `Plain` / `Done` styles on iOS |
-| **Icon Actions (SF Symbols)** | 🟢 Yes | 🟡 No-op | 🟡 No-op | 🟡 No-op | **95%** | `UIImage.systemImageNamed(...)` on iOS |
-| **Flexible Spacers** | 🟢 Yes | 🟡 No-op | 🟡 No-op | 🟡 No-op | **100%** | `UIBarButtonItem(barButtonSystemItem: .flexibleSpace)` on iOS |
-| **Dynamic Action Updates** | 🟢 Yes | 🟢 Yes | 🟢 Yes | 🟢 Yes | **90%** | Real-time toolbar item array updates during focus |
+| Feature | iOS | Android | Desktop (JVM) | macOS | Web (Wasm JS) | Completion Rate | Under the Hood |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :--- |
+| **InputActionsHost** | 🟢 Yes | 🟢 Yes | 🟢 Yes | 🟢 Yes | 🟢 Yes | **100%** | Common CompositionLocal host providing active action registries |
+| **Modifier.inputActions** | 🟢 Yes | 🟢 Yes | 🟢 Yes | 🟢 Yes | 🟢 Yes | **100%** | Modifier Node listening to `FocusEventModifierNode` events |
+| **Plain & Emphasized Actions** | 🟢 Yes | 🟡 No-op | 🟡 No-op | 🟡 No-op | 🟡 No-op | **95%** | Native `UIBarButtonItem` with `Plain` / `Done` styles on iOS |
+| **Icon Actions (SF Symbols)** | 🟢 Yes | 🟡 No-op | 🟡 No-op | 🟡 No-op | 🟡 No-op | **95%** | `UIImage.systemImageNamed(...)` on iOS |
+| **Flexible Spacers** | 🟢 Yes | 🟡 No-op | 🟡 No-op | 🟡 No-op | 🟡 No-op | **100%** | `UIBarButtonItem(barButtonSystemItem: .flexibleSpace)` on iOS |
+| **Dynamic Action Updates** | 🟢 Yes | 🟢 Yes | 🟢 Yes | 🟢 Yes | 🟢 Yes | **90%** | Real-time toolbar item array updates during focus |
 
 ---
 
@@ -58,7 +58,7 @@ Add the dependency to your shared Kotlin Multiplatform module's `build.gradle.kt
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            implementation("zone.ien.inputactions:inputactions:0.0.0")
+            implementation("zone.ien.inputactions:inputactions:0.9.0-alpha02")
         }
     }
 }
@@ -83,10 +83,10 @@ fun App() {
 ```
 
 - **iOS**: `InputActionsHost` intercepts focus events for fields using `Modifier.inputActions(...)` and attaches the native `UIToolbar` to the active iOS keyboard responder.
-- **Android**: `InputActionsHost` acts as a seamless container (no-op), allowing standard Android software keyboard IME behavior to operate without additional layout configuration.
+- **Android, Desktop, macOS, Web (Wasm JS)**: `InputActionsHost` acts as a seamless container (no-op), allowing each platform's standard text-input behavior to operate without additional layout configuration.
 
 > [!IMPORTANT]
-> **Toolchain Requirements**: Built and tested with **Kotlin 2.4.0** and **Compose Multiplatform 1.11.1** (compatible with Compose 1.12.x series). Ensure your project meets the minimum toolchain requirements.
+> **Toolchain Requirements**: Built and tested with **Kotlin 2.4.20-RC2**, **Compose Multiplatform 1.12.0**, and **JDK 17**. Android targets use **minSdk 29** and **compileSdk/targetSdk 37**.
 
 ---
 
@@ -281,6 +281,8 @@ fun RegistrationScreen() {
 
 The repository includes a Kotlin Multiplatform Compose sample application in the `example/` directory.
 
+The sample screen in `example/composeApp/src/commonMain/kotlin/zone/ien/inputaction/example/App.kt` demonstrates standard and separated text actions, a single Done action, standard and pill-style icon actions, and separated icon groups.
+
 To run the sample app:
 
 ### Android
@@ -291,13 +293,18 @@ To run the sample app:
 ### iOS
 Open `example/iosApp/iosApp.xcodeproj` in Xcode and select a simulator or physical target to run `iosApp`.
 
+### Web (Wasm JS)
+```bash
+./gradlew :example:composeApp:wasmJsBrowserDevelopmentRun
+```
+
 ---
 
 ## Platform Limitations & Constraints
 
 1. **Compose iOS Text Responder**: On iOS, native keyboard accessory view integration relies on Compose Multiplatform's native UIResponder text editing infrastructure.
 2. **UIKit Hierarchy Traversal**: The native accessory bar dynamically attaches to the active responder view. Avoid forcing custom native input view replacements outside of `InputActionsHost`.
-3. **Android Status**: Android software keypads natively manage IME action buttons. The library maintains complete API visibility on Android while delegating keyboard action handling to standard `KeyboardOptions(imeAction = ...)` mechanics.
+3. **Other platforms**: Android, Desktop (JVM), macOS, and Web (Wasm JS) expose the common API but currently perform no native accessory rendering. Use each platform's standard text-input or IME APIs for platform-specific keyboard actions.
 
 ---
 
