@@ -6,14 +6,14 @@
 
 [English](README.md) | **한국어**
 
-[![Kotlin](https://img.shields.io/badge/kotlin-2.4.0-blue.svg)](https://kotlinlang.org)
-[![Compose Multiplatform](https://img.shields.io/badge/Compose%20Multiplatform-1.11.1-blue)](https://github.com/JetBrains/compose-multiplatform)
-[![Platform](https://img.shields.io/badge/platform-android%20%7C%20ios%20%7C%20desktop%20%7C%20macos-lightgrey.svg)](https://kotlinlang.org/docs/multiplatform.html)
+[![Kotlin](https://img.shields.io/badge/kotlin-2.4.20--RC2-blue.svg)](https://kotlinlang.org)
+[![Compose Multiplatform](https://img.shields.io/badge/Compose%20Multiplatform-1.12.0-blue)](https://github.com/JetBrains/compose-multiplatform)
+[![Platform](https://img.shields.io/badge/platform-android%20%7C%20ios%20%7C%20desktop%20%7C%20macos%20%7C%20wasmJs-lightgrey.svg)](https://kotlinlang.org/docs/multiplatform.html)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 
 Compose Multiplatform의 `TextField` / `BasicTextField`에 플랫폼 네이티브 텍스트 입력 액션 및 키보드 악세서리 툴바를 제공하는 Kotlin Multiplatform (KMP) 라이브러리입니다.
 
-iOS 환경에서는 Compose가 소유한 텍스트 입력 상태와 포커스 라이프사이클을 그대로 유지하면서, 키보드 상단에 네이티브 `UIToolbar` 액세서리 뷰를 동적으로 연결합니다. Android, Desktop (JVM), macOS 환경에서는 기존 입력 및 IME 동작을 방해하지 않고 안전하게 통과(no-op) 처리하여 공통 Compose 코드베이스 전체에서 완벽한 멀티플랫폼 호환성을 보장합니다.
+iOS 환경에서는 Compose가 소유한 텍스트 입력 상태와 포커스 라이프사이클을 그대로 유지하면서, 키보드 상단에 네이티브 `UIToolbar` 액세서리 뷰를 동적으로 연결합니다. Android, Desktop (JVM), macOS, Web (Wasm JS) 환경에서는 기존 입력 및 IME 동작을 방해하지 않고 안전하게 통과(no-op) 처리하여 공통 Compose 코드베이스 전체에서 완벽한 멀티플랫폼 호환성을 보장합니다.
 
 ---
 
@@ -35,18 +35,18 @@ iOS 환경에서는 Compose가 소유한 텍스트 입력 상태와 포커스 �
 - **Compose 관용적 Modifier API**: `Modifier.inputActions(...)`를 통해 Compose `TextField`에 손쉽게 네이티브 액션을 부착합니다.
 - **포커스 연동 라이프사이클**: 텍스트 필드의 포커스 획득 및 상실 시 자동으로 툴바를 표시하거나 해제합니다.
 - **SF Symbols 및 커스텀 항목**: SF Symbol 기반 네이티브 아이콘, Plain/Done 스타일, 가변 간격 요소(`InputAction.FlexibleSpace`)를 지원합니다.
-- **크로스 플랫폼 타깃 지원**: **iOS**, **Android**, **Desktop (JVM)**, **macOS** 타깃을 공식 지원합니다. `commonMain` 영역에서 `InputActionsHost`로 UI 트리를 감싸 손쉽게 멀티플랫폼에 적용할 수 있습니다.
+- **크로스 플랫폼 타깃 지원**: **iOS**, **Android**, **Desktop (JVM)**, **macOS**, **Web (Wasm JS)** 타깃을 공식 지원합니다. `commonMain` 영역에서 `InputActionsHost`로 UI 트리를 감싸 손쉽게 멀티플랫폼에 적용할 수 있습니다.
 
 ### 지원 기능 및 플랫폼 매트릭스
 
-| 기능 | iOS | Android | Desktop (JVM) | macOS | 완성도 | 구현 방식 |
-| :--- | :---: | :---: | :---: | :---: | :---: | :--- |
-| **InputActionsHost** | 🟢 지원 | 🟢 지원 | 🟢 지원 | 🟢 지원 | **100%** | 활성 액션 레지스트리를 공급하는 공통 CompositionLocal 호스트 |
-| **Modifier.inputActions** | 🟢 지원 | 🟢 지원 | 🟢 지원 | 🟢 지원 | **100%** | `FocusEventModifierNode` 이벤트를 감지하는 Modifier Node |
-| **Plain & Done 액션** | 🟢 지원 | 🟡 No-op | 🟡 No-op | 🟡 No-op | **95%** | iOS `Plain` / `Done` 스타일의 네이티브 `UIBarButtonItem` |
-| **아이콘 액션 (SF Symbols)** | 🟢 지원 | 🟡 No-op | 🟡 No-op | 🟡 No-op | **95%** | iOS `UIImage.systemImageNamed(...)` 연동 |
-| **Flexible Spacers** | 🟢 지원 | 🟡 No-op | 🟡 No-op | 🟡 No-op | **100%** | iOS `UIBarButtonItem(barButtonSystemItem: .flexibleSpace)` |
-| **동적 액션 업데이트** | 🟢 지원 | 🟢 지원 | 🟢 지원 | 🟢 지원 | **90%** | 포커스 유지 중 액션 목록 변경 시 툴바 아이템 실시간 갱신 |
+| 기능 | iOS | Android | Desktop (JVM) | macOS | Web (Wasm JS) | 완성도 | 구현 방식 |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :--- |
+| **InputActionsHost** | 🟢 지원 | 🟢 지원 | 🟢 지원 | 🟢 지원 | 🟢 지원 | **100%** | 활성 액션 레지스트리를 공급하는 공통 CompositionLocal 호스트 |
+| **Modifier.inputActions** | 🟢 지원 | 🟢 지원 | 🟢 지원 | 🟢 지원 | 🟢 지원 | **100%** | `FocusEventModifierNode` 이벤트를 감지하는 Modifier Node |
+| **Plain & Done 액션** | 🟢 지원 | 🟡 No-op | 🟡 No-op | 🟡 No-op | 🟡 No-op | **95%** | iOS `Plain` / `Done` 스타일의 네이티브 `UIBarButtonItem` |
+| **아이콘 액션 (SF Symbols)** | 🟢 지원 | 🟡 No-op | 🟡 No-op | 🟡 No-op | 🟡 No-op | **95%** | iOS `UIImage.systemImageNamed(...)` 연동 |
+| **Flexible Spacers** | 🟢 지원 | 🟡 No-op | 🟡 No-op | 🟡 No-op | 🟡 No-op | **100%** | iOS `UIBarButtonItem(barButtonSystemItem: .flexibleSpace)` |
+| **동적 액션 업데이트** | 🟢 지원 | 🟢 지원 | 🟢 지원 | 🟢 지원 | 🟢 지원 | **90%** | 포커스 유지 중 액션 목록 변경 시 툴바 아이템 실시간 갱신 |
 
 ---
 
@@ -58,7 +58,7 @@ iOS 환경에서는 Compose가 소유한 텍스트 입력 상태와 포커스 �
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            implementation("zone.ien.inputactions:inputactions:0.0.0")
+            implementation("zone.ien.inputactions:inputactions:0.9.0-alpha02")
         }
     }
 }
@@ -83,10 +83,10 @@ fun App() {
 ```
 
 - **iOS**: `InputActionsHost`가 `Modifier.inputActions(...)`가 적용된 필드의 포커스 이벤트를 감지하여 iOS 활성 키보드 Responder에 네이티브 `UIToolbar`를 부착합니다.
-- **Android**: `InputActionsHost`가 공통 컨테이너(no-op)로 동작하여 별도 레이아웃 변경 없이 기존 Android 소프트웨어 키보드 IME 동작이 유지됩니다.
+- **Android, Desktop, macOS, Web (Wasm JS)**: `InputActionsHost`가 공통 컨테이너(no-op)로 동작하여 별도 레이아웃 변경 없이 각 플랫폼의 기본 텍스트 입력 및 IME 동작이 유지됩니다.
 
 > [!IMPORTANT]
-> **툴체인 요구사항**: 본 라이브러리는 **Kotlin 2.4.0** 및 **Compose Multiplatform 1.11.1** (Compose 1.12.x 계열 호환)을 기준으로 작성 및 검증되었습니다.
+> **툴체인 요구사항**: 본 라이브러리는 **Kotlin 2.4.20-RC2**, **Compose Multiplatform 1.12.0**, **JDK 17**을 기준으로 작성 및 검증되었습니다. Android 타깃은 **minSdk 29**, **compileSdk/targetSdk 37**을 사용합니다.
 
 ---
 
@@ -255,6 +255,8 @@ fun RegistrationScreen() {
 
 저장소의 `example/` 디렉터리에 Kotlin Multiplatform Compose 샘플 애플리케이션이 포함되어 있습니다.
 
+`example/composeApp/src/commonMain/kotlin/zone/ien/inputaction/example/App.kt`의 샘플 화면에서 기본/분리 텍스트 액션, 단일 Done 액션, 기본/필 형태 아이콘 액션, 아이콘 그룹 분리 등 6가지 시나리오를 확인할 수 있습니다.
+
 ### Android
 ```bash
 ./gradlew :example:androidApp:installDebug
@@ -263,13 +265,18 @@ fun RegistrationScreen() {
 ### iOS
 `example/iosApp/iosApp.xcodeproj` 파일을 Xcode에서 열고 시뮬레이터 또는 실기기 타깃을 선택하여 실행합니다.
 
+### Web (Wasm JS)
+```bash
+./gradlew :example:composeApp:wasmJsBrowserDevelopmentRun
+```
+
 ---
 
 ## 플랫폼 제약 사항
 
 1. **Compose iOS Text Responder**: iOS 네이티브 키보드 액세서리 연동은 Compose Multiplatform의 네이티브 UIResponder 텍스트 편집 인프라에 의존합니다.
 2. **UIKit 계층 순회**: 네이티브 액세서리 바는 현재 활성화된 Responder 뷰에 동적으로 부착됩니다.
-3. **Android 처리**: Android는 네이티브 소프트웨어 키패드가 IME 액션 버튼을 직접 처리하므로, 기본 `KeyboardOptions(imeAction = ...)` 매커니즘을 사용하도록 안심하고 위임할 수 있습니다.
+3. **기타 플랫폼 처리**: Android, Desktop (JVM), macOS, Web (Wasm JS)은 공통 API를 제공하지만 현재 네이티브 액세서리 UI를 렌더링하지 않습니다. 플랫폼별 키보드 액션은 각 플랫폼의 기본 텍스트 입력 및 IME API를 사용하세요.
 
 ---
 
