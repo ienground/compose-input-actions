@@ -252,6 +252,8 @@ class IosInputActionsHostTest {
 
         assertTrue(container.allowsSelfSizing)
         assertEquals(52.0, container.reservedHeight, absoluteTolerance = 0.01)
+        assertFalse(container.opaque)
+        assertNull(container.backgroundColor)
     }
 
     @Test

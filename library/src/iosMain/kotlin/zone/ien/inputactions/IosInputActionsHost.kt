@@ -241,6 +241,7 @@ internal class IosToolbarAccessoryContainer(
         // fully controlled by UIKit.
         allowsSelfSizing = true
         translatesAutoresizingMaskIntoConstraints = false
+        opaque = false
         backgroundColor = null
         addSubview(toolbar)
         toolbar.translatesAutoresizingMaskIntoConstraints = false

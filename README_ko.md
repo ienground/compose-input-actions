@@ -58,7 +58,7 @@ iOS 환경에서는 Compose가 소유한 텍스트 입력 상태와 포커스 �
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            implementation("zone.ien.inputactions:inputactions:0.9.0-alpha02")
+            implementation("zone.ien.inputactions:inputactions:0.9.0-alpha06")
         }
     }
 }
