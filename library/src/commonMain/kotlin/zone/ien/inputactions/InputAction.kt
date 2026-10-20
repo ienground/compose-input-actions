@@ -1,5 +1,9 @@
 package zone.ien.inputactions
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+
 /**
  * Describes how an input action is presented in a native action bar.
  */
@@ -64,6 +68,30 @@ public class InputAction internal constructor(
     )
 
     public companion object {
+        /**
+         * 누르면 현재 소프트웨어 키보드를 닫는 액션을 생성합니다.
+         *
+         * 키보드 컨트롤러가 없는 환경에서는 클릭해도 아무 동작을 하지 않습니다.
+         * 입력 필드의 포커스는 해제하지 않습니다.
+         *
+         * @param icon 표시할 아이콘. 기본값은 체크 아이콘입니다.
+         * @param style 액션의 표시 스타일. 기본값은 완료 스타일입니다.
+         */
+        @Composable
+        public fun Done(
+            icon: InputActionIcon? = InputActionIcon("checkmark"),
+            style: InputActionStyle = InputActionStyle.Done,
+        ): InputAction {
+            val keyboardController = LocalSoftwareKeyboardController.current
+            return remember(keyboardController, icon, style) {
+                InputAction(
+                    icon = icon,
+                    style = style,
+                    onClick = { keyboardController?.hide() },
+                )
+            }
+        }
+
         /**
          * Creates a flexible spacer for placement between visible input actions.
          *

@@ -43,7 +43,6 @@ import zone.ien.utils.ui.foundation.IenTheme
 import zone.ien.utils.ui.interactive.IenTextField
 import zone.ien.utils.ui.primitives.IenDivider
 import zone.ien.utils.ui.primitives.IenSurface
-import zone.ien.utils.ui.primitives.IenText
 import zone.ien.utils.ui.screen.IenScaffoldContentEdge
 import zone.ien.utils.ui.screen.IenTopAppBarScaffold
 import zone.ien.utils.ui.wrapper.IenRootWrapper
@@ -56,7 +55,7 @@ fun App() {
                 val scrollState = rememberScrollState()
                 IenTopAppBarScaffold(
                     actions = listOf(),
-                    contentEdge = IenScaffoldContentEdge(scrollState = scrollState),
+                    contentEdge = IenScaffoldContentEdge(scrollableState = scrollState),
                     title = {
                         Text(text = stringResource(Res.string.app_name))
                     },
@@ -284,8 +283,8 @@ private fun ComponentSection(
             modifier = Modifier.padding(IenTheme.spacing.md),
             verticalArrangement = Arrangement.spacedBy(IenTheme.spacing.md),
         ) {
-            IenText(title, style = IenTheme.typography.title3)
-            IenDivider()
+            Text(text = title, style = IenTheme.typography.title3)
+            IenDivider.Horizontal()
             content()
         }
     }
