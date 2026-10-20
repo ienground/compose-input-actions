@@ -58,7 +58,7 @@ Add the dependency to your shared Kotlin Multiplatform module's `build.gradle.kt
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            implementation("zone.ien.inputactions:inputactions:0.9.0-alpha06")
+            implementation("zone.ien.inputactions:inputactions:1.0.0")
         }
     }
 }
