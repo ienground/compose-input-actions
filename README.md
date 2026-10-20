@@ -6,8 +6,9 @@
 
 **English** | [한국어](README_ko.md)
 
-[![Kotlin](https://img.shields.io/badge/kotlin-2.4.20--RC2-blue.svg)](https://kotlinlang.org)
-[![Compose Multiplatform](https://img.shields.io/badge/Compose%20Multiplatform-1.12.0-blue)](https://github.com/JetBrains/compose-multiplatform)
+[![Maven Central](https://img.shields.io/maven-central/v/zone.ien.inputactions/inputactions.svg)](https://central.sonatype.com/artifact/zone.ien.inputactions/inputactions)
+[![Kotlin](https://img.shields.io/badge/kotlin-2.4.21-blue.svg)](https://kotlinlang.org)
+[![Compose Multiplatform](https://img.shields.io/badge/Compose%20Multiplatform-1.12.2-blue)](https://github.com/JetBrains/compose-multiplatform)
 [![Platform](https://img.shields.io/badge/platform-android%20%7C%20ios%20%7C%20desktop%20%7C%20macos%20%7C%20wasmJs-lightgrey.svg)](https://kotlinlang.org/docs/multiplatform.html)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 
@@ -86,7 +87,7 @@ fun App() {
 - **Android, Desktop, macOS, Web (Wasm JS)**: `InputActionsHost` acts as a seamless container (no-op), allowing each platform's standard text-input behavior to operate without additional layout configuration.
 
 > [!IMPORTANT]
-> **Toolchain Requirements**: Built and tested with **Kotlin 2.4.20-RC2**, **Compose Multiplatform 1.12.0**, and **JDK 17**. Android targets use **minSdk 29** and **compileSdk/targetSdk 37**.
+> **Repository Build Configuration**: **Kotlin 2.4.21**, **Compose Multiplatform 1.12.2**, **Android Gradle Plugin 9.3.1**, **Gradle 9.5.1**, and **JDK 17**. The library's Android target uses **minSdk 29** and **compileSdk 37**; the sample app uses **targetSdk 37**.
 
 ---
 

@@ -6,8 +6,9 @@
 
 [English](README.md) | **한국어**
 
-[![Kotlin](https://img.shields.io/badge/kotlin-2.4.20--RC2-blue.svg)](https://kotlinlang.org)
-[![Compose Multiplatform](https://img.shields.io/badge/Compose%20Multiplatform-1.12.0-blue)](https://github.com/JetBrains/compose-multiplatform)
+[![Maven Central](https://img.shields.io/maven-central/v/zone.ien.inputactions/inputactions.svg)](https://central.sonatype.com/artifact/zone.ien.inputactions/inputactions)
+[![Kotlin](https://img.shields.io/badge/kotlin-2.4.21-blue.svg)](https://kotlinlang.org)
+[![Compose Multiplatform](https://img.shields.io/badge/Compose%20Multiplatform-1.12.2-blue)](https://github.com/JetBrains/compose-multiplatform)
 [![Platform](https://img.shields.io/badge/platform-android%20%7C%20ios%20%7C%20desktop%20%7C%20macos%20%7C%20wasmJs-lightgrey.svg)](https://kotlinlang.org/docs/multiplatform.html)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 
@@ -86,7 +87,7 @@ fun App() {
 - **Android, Desktop, macOS, Web (Wasm JS)**: `InputActionsHost`가 공통 컨테이너(no-op)로 동작하여 별도 레이아웃 변경 없이 각 플랫폼의 기본 텍스트 입력 및 IME 동작이 유지됩니다.
 
 > [!IMPORTANT]
-> **툴체인 요구사항**: 본 라이브러리는 **Kotlin 2.4.20-RC2**, **Compose Multiplatform 1.12.0**, **JDK 17**을 기준으로 작성 및 검증되었습니다. Android 타깃은 **minSdk 29**, **compileSdk/targetSdk 37**을 사용합니다.
+> **저장소 빌드 설정**: **Kotlin 2.4.21**, **Compose Multiplatform 1.12.2**, **Android Gradle Plugin 9.3.1**, **Gradle 9.5.1**, **JDK 17**을 사용합니다. 라이브러리 Android 타깃은 **minSdk 29**, **compileSdk 37**이며, 샘플 앱은 **targetSdk 37**을 사용합니다.
 
 ---
 
