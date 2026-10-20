@@ -34,7 +34,7 @@ On iOS, it attaches native `UIToolbar` keyboard accessory views directly to the 
 
 - **Compose-Idiomatic Modifier API**: Easily attach native actions to any Compose `TextField` using `Modifier.inputActions(...)`.
 - **Focus-Aware Lifecycle**: Automatically presents and dismisses action toolbars when fields gain or lose focus.
-- **SF Symbols & Custom Items**: Support for native iOS icons via SF Symbols, plain/done item styles, and flexible spacers (`InputAction.FlexibleSpace`).
+- **SF Symbols & Custom Items**: Support for native iOS icons via SF Symbols, plain/done item styles, flexible spacers, and an `InputAction.Done()` helper that dismisses the software keyboard.
 - **Cross-Platform Compatibility**: Supports **iOS**, **Android**, **Desktop (JVM)**, **macOS**, and **Web (Wasm JS)** target platforms. Wrap your UI tree with `InputActionsHost` inside `commonMain` for seamless multiplatform deployment.
 
 ### Supported Features & Platforms Matrix
@@ -114,16 +114,18 @@ Modifier extension for Compose text fields to register actions triggered when th
 
 ### 3. `InputAction`
 
-Represents an action item or spacer displayed in the keyboard accessory toolbar.
+Represents an action item or spacer displayed in the native text-input action area. Create regular
+actions with the public constructor; the companion factories create the built-in Done action and
+flexible spacers. `isFlexibleSpace` is read-only and is set by the spacer factories.
 
 ```kotlin
-class InputAction(
-    val title: String = "",
-    val style: InputActionStyle = InputActionStyle.Plain,
-    val icon: InputActionIcon? = null,
-    val hidesSharedBackground: Boolean = false,
-    val separatesSharedBackground: Boolean = false,
-    val onClick: () -> Unit,
+InputAction(
+    title: String = "",
+    style: InputActionStyle = InputActionStyle.Plain,
+    icon: InputActionIcon? = null,
+    hidesSharedBackground: Boolean = false,
+    separatesSharedBackground: Boolean = false,
+    onClick: () -> Unit,
 )
 ```
 
@@ -138,8 +140,14 @@ class InputAction(
 | `onClick` | `() -> Unit` | **Required** | Callback executed when the action button is tapped. Ignored for `FlexibleSpace`. |
 
 #### Companion Factories
-- **`InputAction.FlexibleSpace`**: Standard flexible spacer dividing buttons.
-- **`InputAction.FlexibleSpace(separatesSharedBackground: Boolean = false)`**: Flexible spacer with optional system group separation. This uses `UIBarButtonItem.fixedSpaceItem()` on iOS 26+.
+- **`InputAction.Done(icon = InputActionIcon("checkmark"), style = InputActionStyle.Done)`**: A composable factory for a Done action. Tapping it hides the software keyboard without clearing the field's focus. If no software keyboard controller is available, it does nothing.
+- **`InputAction.FlexibleSpace`**: Standard flexible spacer dividing actions.
+- **`InputAction.FlexibleSpace(hidesSharedBackground, separatesSharedBackground)`**: Creates a flexible spacer with optional shared-background behavior.
+- **`InputAction.flexibleSpace(hidesSharedBackground, separatesSharedBackground)`**: Lowercase Kotlin-style alias for the spacer factory.
+
+The spacer factory parameters both default to `false`. On iOS 26 and later,
+`separatesSharedBackground = true` inserts UIKit's zero-width `fixedSpaceItem()` separator;
+`hidesSharedBackground = true` opts the spacer out of the shared toolbar background.
 
 #### Shared Background Groups
 

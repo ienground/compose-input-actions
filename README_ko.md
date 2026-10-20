@@ -34,7 +34,7 @@ iOS 환경에서는 Compose가 소유한 텍스트 입력 상태와 포커스 �
 
 - **Compose 관용적 Modifier API**: `Modifier.inputActions(...)`를 통해 Compose `TextField`에 손쉽게 네이티브 액션을 부착합니다.
 - **포커스 연동 라이프사이클**: 텍스트 필드의 포커스 획득 및 상실 시 자동으로 툴바를 표시하거나 해제합니다.
-- **SF Symbols 및 커스텀 항목**: SF Symbol 기반 네이티브 아이콘, Plain/Done 스타일, 가변 간격 요소(`InputAction.FlexibleSpace`)를 지원합니다.
+- **SF Symbols 및 커스텀 항목**: SF Symbol 네이티브 아이콘, Plain/Done 스타일, 가변 간격 요소와 소프트웨어 키보드를 닫는 `InputAction.Done()` 헬퍼를 지원합니다.
 - **크로스 플랫폼 타깃 지원**: **iOS**, **Android**, **Desktop (JVM)**, **macOS**, **Web (Wasm JS)** 타깃을 공식 지원합니다. `commonMain` 영역에서 `InputActionsHost`로 UI 트리를 감싸 손쉽게 멀티플랫폼에 적용할 수 있습니다.
 
 ### 지원 기능 및 플랫폼 매트릭스
@@ -114,16 +114,18 @@ CompositionLocal을 통해 로컬 입력 액션 레지스트리 호스트를 구
 
 ### 3. `InputAction`
 
-키보드 악세서리 툴바에 표시될 액션 버튼 또는 가변 간격 요소를 정의하는 클래스입니다.
+네이티브 텍스트 입력 액션 영역에 표시할 액션 또는 가변 간격 요소를 정의합니다. 일반
+액션은 공개 생성자로 만들고, Companion 팩토리로 기본 완료 액션이나 가변 간격 요소를
+만들 수 있습니다. `isFlexibleSpace`는 읽기 전용이며 스페이서 팩토리에서 설정됩니다.
 
 ```kotlin
-class InputAction(
-    val title: String = "",
-    val style: InputActionStyle = InputActionStyle.Plain,
-    val icon: InputActionIcon? = null,
-    val hidesSharedBackground: Boolean = false,
-    val separatesSharedBackground: Boolean = false,
-    val onClick: () -> Unit,
+InputAction(
+    title: String = "",
+    style: InputActionStyle = InputActionStyle.Plain,
+    icon: InputActionIcon? = null,
+    hidesSharedBackground: Boolean = false,
+    separatesSharedBackground: Boolean = false,
+    onClick: () -> Unit,
 )
 ```
 
@@ -138,11 +140,14 @@ class InputAction(
 | `onClick` | `() -> Unit` | **필수** | 액션 버튼이 클릭/탭되었을 때 실행할 콜백입니다. `FlexibleSpace`에서는 무시됩니다. |
 
 #### 팩토리 헬퍼 메서드
-- **`InputAction.FlexibleSpace`**: 버튼 간 가변 간격을 배치하는 기본 스페이서.
-- **`InputAction.FlexibleSpace(separatesSharedBackground: Boolean = false)`**: 양쪽 그룹의 배경을 유지하면서 시스템 분리자를 추가하는 가변 스페이서. iOS 26+에서는 `UIBarButtonItem.fixedSpaceItem()`을 사용합니다.
+- **`InputAction.Done(icon = InputActionIcon("checkmark"), style = InputActionStyle.Done)`**: Done 액션을 만드는 컴포저블 팩토리입니다. 누르면 입력 필드의 포커스를 유지한 채 소프트웨어 키보드를 닫습니다. 소프트웨어 키보드 컨트롤러가 없는 환경에서는 동작하지 않습니다.
+- **`InputAction.FlexibleSpace`**: 액션 사이에 가변 간격을 배치하는 기본 스페이서.
+- **`InputAction.FlexibleSpace(hidesSharedBackground, separatesSharedBackground)`**: 공유 배경 동작을 선택할 수 있는 가변 스페이서입니다. 두 옵션의 기본값은 `false`입니다.
+- **`InputAction.flexibleSpace(hidesSharedBackground, separatesSharedBackground)`**: 위 스페이서 팩토리의 소문자 Kotlin 스타일 별칭입니다.
 
-`hidesSharedBackground`는 해당 항목의 공유 배경을 실제로 숨기는 옵션입니다. 배경을 유지한
-채 그룹만 나누려면 `separatesSharedBackground`를 사용하세요.
+`separatesSharedBackground = true`는 iOS 26+에서 UIKit의 너비 0인 `fixedSpaceItem()` 분리자를
+삽입합니다. `hidesSharedBackground = true`는 스페이서가 공유 툴바 배경에서 제외되도록
+합니다. 배경을 유지한 채 그룹을 나누려면 `separatesSharedBackground`를 사용하세요.
 
 ---
 
