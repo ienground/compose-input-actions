@@ -6,7 +6,7 @@ android-compileSdk = "37"
 android-targetSdk = "37"
 lib-version-name = "1.0.1-dev01"
 
-ienlab-cmp = "3.7.0-alpha08-dev05"
+ienlab-cmp = "3.7.0-alpha08-dev06"
 
 # plugin
 compose-plugin = "1.12.2"
