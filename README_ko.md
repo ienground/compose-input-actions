@@ -141,7 +141,7 @@ InputAction(
 | `onClick` | `() -> Unit` | **필수** | 액션 버튼이 클릭/탭되었을 때 실행할 콜백입니다. `FlexibleSpace`에서는 무시됩니다. |
 
 #### 팩토리 헬퍼 메서드
-- **`InputAction.Done(icon = InputActionIcon("checkmark"), style = InputActionStyle.Done)`**: Done 액션을 만드는 컴포저블 팩토리입니다. 누르면 입력 필드의 포커스를 유지한 채 소프트웨어 키보드를 닫습니다. 소프트웨어 키보드 컨트롤러가 없는 환경에서는 동작하지 않습니다.
+- **`InputAction.Done(icon = InputActionIcon("checkmark"), style = InputActionStyle.Done)`**: Done 액션을 만드는 컴포저블 팩토리입니다. 단독으로 사용할 때는 iOS 툴바 오른쪽 끝에 배치되며, 누르면 입력 필드의 포커스를 유지한 채 소프트웨어 키보드를 닫습니다. 소프트웨어 키보드 컨트롤러가 없는 환경에서는 동작하지 않습니다.
 - **`InputAction.FlexibleSpace`**: 액션 사이에 가변 간격을 배치하는 기본 스페이서.
 - **`InputAction.FlexibleSpace(hidesSharedBackground, separatesSharedBackground)`**: 공유 배경 동작을 선택할 수 있는 가변 스페이서입니다. 두 옵션의 기본값은 `false`입니다.
 - **`InputAction.flexibleSpace(hidesSharedBackground, separatesSharedBackground)`**: 위 스페이서 팩토리의 소문자 Kotlin 스타일 별칭입니다.

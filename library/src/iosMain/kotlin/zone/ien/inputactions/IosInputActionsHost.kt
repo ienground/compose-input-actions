@@ -122,7 +122,8 @@ internal class IosInputActionsHost : CommonInputActionsHost() {
             it.isFlexibleSpace
         }
         val items = itemGroups.flatten().toMutableList()
-        if (!hasExplicitFlexibleSpace && actions.size > 1) {
+        val hasOnlyDoneAction = actions.singleOrNull()?.style == InputActionStyle.Done
+        if (!hasExplicitFlexibleSpace && (actions.size > 1 || hasOnlyDoneAction)) {
             val finalGroupStart = itemGroups
                 .dropLast(1)
                 .sumOf { it.size }

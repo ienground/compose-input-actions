@@ -4,9 +4,9 @@ kotlin = "2.4.21"
 android-minSdk = "29"
 android-compileSdk = "37"
 android-targetSdk = "37"
-lib-version-name = "1.0.0"
+lib-version-name = "1.0.1-dev01"
 
-ienlab-cmp = "3.7.0-alpha07"
+ienlab-cmp = "3.7.0-alpha08-dev05"
 
 # plugin
 compose-plugin = "1.12.2"
