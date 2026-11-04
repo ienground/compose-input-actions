@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 384 384" fill="none" role="img" aria-labelledby="icon-title icon-desc" version="1.1">
+  <title id="icon-title">Compose Input Actions</title>
+  <desc id="icon-desc">3줄 키보드와 위쪽의 이동·완료 버튼으로 구성된 기존 로고를 바탕으로, 둥근 도형과 파랑·연보라 그라데이션을 적용한 아이콘</desc>
+  <defs>
+    <linearGradient id="keyboard-face" x1="192" y1="132" x2="192" y2="320" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#A7CFFF" />
+      <stop offset=".48" stop-color="#B8C3FF" />
+      <stop offset="1" stop-color="#979DFF" />
+    </linearGradient>
+    <linearGradient id="keyboard-edge" x1="36" y1="226" x2="348" y2="226" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ADC7FC" />
+      <stop offset=".16" stop-color="#ADC7FC" stop-opacity="0" />
+      <stop offset=".84" stop-color="#ADC7FC" stop-opacity="0" />
+      <stop offset="1" stop-color="#ADC7FC" />
+    </linearGradient>
+    <linearGradient id="keyboard-base" x1="192" y1="264" x2="192" y2="332" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#C2DEFF" />
+      <stop offset="1" stop-color="#D5E8FF" />
+    </linearGradient>
+    <linearGradient id="previous-face" x1="108" y1="50" x2="108" y2="110" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#D8EAFF" />
+      <stop offset="1" stop-color="#BAC0FE" />
+    </linearGradient>
+    <linearGradient id="done-face" x1="276" y1="50" x2="276" y2="110" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#3584FB" />
+      <stop offset=".47" stop-color="#3185FF" />
+      <stop offset="1" stop-color="#A2A6FF" />
+    </linearGradient>
+    <linearGradient id="action-key" x1=".5" y1="0" x2=".5" y2="1">
+      <stop stop-color="#3185FF" />
+      <stop offset=".5" stop-color="#3989F8" />
+      <stop offset="1" stop-color="#6F99FF" />
+    </linearGradient>
+  </defs>
+  <rect x="78" y="50" width="60" height="66" rx="30" fill="#D6DFFF" />
+  <circle cx="108" cy="80" r="30" fill="url(#previous-face)" />
+  <path d="M96 85L108 73L120 85" transform="translate(108 80) scale(.8) translate(-108 -80)" stroke="#5746E4" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" />
+  <rect x="246" y="50" width="60" height="66" rx="30" fill="#BAE3FF" />
+  <circle cx="276" cy="80" r="30" fill="url(#done-face)" />
+  <path d="M262 81L272 91L292 69" transform="translate(276 80) scale(.8) translate(-276 -80)" stroke="white" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" />
+  <rect x="36" y="144" width="312" height="188" rx="34" fill="url(#keyboard-base)" />
+  <g fill="url(#keyboard-face)">
+    <rect x="36" y="132" width="312" height="188" rx="34" />
+  </g>
+  <g fill="url(#keyboard-edge)">
+    <rect x="36" y="132" width="312" height="188" rx="34" />
+  </g>
+  <g fill="white">
+    <g>
+      <g transform="translate(56 152)">
+        <rect width="48" height="42" rx="14" />
+      </g>
+    </g>
+    <g>
+      <g transform="translate(112 152)">
+        <rect width="48" height="42" rx="14" />
+      </g>
+    </g>
+    <g>
+      <g transform="translate(168 152)">
+        <rect width="48" height="42" rx="14" />
+      </g>
+    </g>
+    <g>
+      <g transform="translate(224 152)">
+        <rect width="48" height="42" rx="14" />
+      </g>
+    </g>
+    <g>
+      <g transform="translate(280 152)">
+        <rect width="48" height="42" rx="14" />
+      </g>
+    </g>
+    <g>
+      <g transform="translate(56 204)">
+        <rect width="48" height="42" rx="14" />
+      </g>
+    </g>
+    <g>
+      <g transform="translate(112 204)">
+        <rect width="48" height="42" rx="14" />
+      </g>
+    </g>
+    <g>
+      <g transform="translate(168 204)">
+        <rect width="48" height="42" rx="14" />
+      </g>
+    </g>
+    <g>
+      <g transform="translate(224 204)">
+        <rect width="48" height="42" rx="14" />
+      </g>
+    </g>
+    <g>
+      <g transform="translate(56 256)">
+        <rect width="48" height="42" rx="14" />
+      </g>
+    </g>
+    <rect x="112" y="256" width="160" height="42" rx="14" />
+    <g>
+      <g transform="translate(280 256)">
+        <rect width="48" height="42" rx="14" />
+      </g>
+    </g>
+  </g>
+  <g fill="url(#action-key)">
+    <g transform="translate(280 204)">
+      <rect width="48" height="42" rx="14" />
+    </g>
+  </g>
+</svg>
